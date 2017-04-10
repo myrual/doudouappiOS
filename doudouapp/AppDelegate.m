@@ -7,7 +7,9 @@
 //
 
 #import "AppDelegate.h"
-
+#import "BattleFeedTableViewController.h"
+#import "maiTabViewController.h"
+#import "profileTableViewController.h"
 @interface AppDelegate ()
 
 @end
@@ -16,6 +18,19 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    
+    BattleFeedTableViewController *feedvc = [[BattleFeedTableViewController alloc] init];
+    feedvc.title = @"Feed";
+    profileTableViewController *profilevc = [[profileTableViewController alloc] init];
+    profilevc.title = @"Profile";
+    maiTabViewController * rootvc = [[maiTabViewController alloc] init];
+    NSArray *childvc = @[feedvc, profilevc];
+    [rootvc setViewControllers:childvc];
+    self.window.rootViewController = rootvc;
+    //self.window.rootViewController = [[BattleFeedTableViewController alloc] initWithNibName:nil bundle:nil];
+    
+    
     // Override point for customization after application launch.
     return YES;
 }
