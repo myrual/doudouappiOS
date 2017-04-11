@@ -1,23 +1,21 @@
 //
-//  BattleFeedTableViewController.m
+//  userProfileTableViewController.m
 //  doudouapp
 //
-//  Created by xiao on 4/11/17.
+//  Created by xiao on 4/12/17.
 //  Copyright © 2017 doudouapp llc. All rights reserved.
 //
 
-#import "BattleFeedTableViewController.h"
-#import "userButton.h"
 #import "userProfileTableViewController.h"
-@interface BattleFeedTableViewController ()
+
+@interface userProfileTableViewController ()
 
 @end
 
-@implementation BattleFeedTableViewController
-
+@implementation userProfileTableViewController
+@synthesize userName;
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"Feed";
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -41,41 +39,17 @@
     return 1;
 }
 
--(void) jumpto:(userButton *) sender{
-    NSLog(@"jumpto");
-    userProfileTableViewController *vc = [[userProfileTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    vc.userName = sender.userData;
-    [self.navigationController pushViewController:vc animated:true];
-}
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"feed" forIndexPath:indexPath];
     UITableViewCell *cell = [[UITableViewCell alloc] init];
-    userButton *leftUser = [[userButton alloc] initWithFrame:CGRectMake(10, 10, 100, 20)];
-    leftUser.userData = @"jiangnan";
-    [leftUser setTitle:@"jiangnan" forState:UIControlStateNormal];
-    [leftUser setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [leftUser addTarget:self action:@selector(jumpto:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.textLabel setText:self.userName];
     
-    userButton *rightUser = [[userButton alloc] initWithFrame:CGRectMake(300, 10, 100, 20)];
-    rightUser.userData = @"lilin";
-    [rightUser setTitle:@"lilin" forState:UIControlStateNormal];
-    [rightUser setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [rightUser addTarget:self action:@selector(jumpto:) forControlEvents:UIControlEventTouchUpInside];
-    
-    [cell addSubview:leftUser];
-    [cell addSubview:rightUser];
     // Configure the cell...
-    cell.textLabel.text = @"Ahoa";
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
     return cell;
 }
 
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return UIScreen.mainScreen.bounds.size.width;
-}
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -20,9 +20,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     
-    BattleFeedTableViewController *feedvc = [[BattleFeedTableViewController alloc] init];
+    BattleFeedTableViewController *feedvc = [[BattleFeedTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
     feedvc.title = @"Feed";
-    profileTableViewController *profilevc = [[profileTableViewController alloc] init];
+    profileTableViewController *profilevc = [[profileTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
     profilevc.title = @"Profile";
     maiTabViewController * rootvc = [[maiTabViewController alloc] init];
     NSArray *childvc = @[feedvc, profilevc];

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		11952DB91E9D8EF700D82608 /* userButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 11952DB81E9D8EF700D82608 /* userButton.m */; };
+		11952DBD1E9D900300D82608 /* userProfileTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 11952DBC1E9D900300D82608 /* userProfileTableViewController.m */; };
 		11A8F1C21E9C3353009B7BD4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 11A8F1C11E9C3353009B7BD4 /* main.m */; };
 		11A8F1C51E9C3353009B7BD4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 11A8F1C41E9C3353009B7BD4 /* AppDelegate.m */; };
 		11A8F1C81E9C3353009B7BD4 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 11A8F1C71E9C3353009B7BD4 /* FirstViewController.m */; };
@@ -20,6 +22,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		11952DB81E9D8EF700D82608 /* userButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = userButton.m; sourceTree = "<group>"; };
+		11952DBA1E9D8F0400D82608 /* userButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = userButton.h; sourceTree = "<group>"; };
+		11952DBB1E9D900300D82608 /* userProfileTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = userProfileTableViewController.h; sourceTree = "<group>"; };
+		11952DBC1E9D900300D82608 /* userProfileTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = userProfileTableViewController.m; sourceTree = "<group>"; };
 		11A8F1BD1E9C3353009B7BD4 /* doudouapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = doudouapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11A8F1C11E9C3353009B7BD4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		11A8F1C31E9C3353009B7BD4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -75,9 +81,13 @@
 				11A8F1C61E9C3353009B7BD4 /* FirstViewController.h */,
 				11A8F1C71E9C3353009B7BD4 /* FirstViewController.m */,
 				11A8F1DA1E9C34B2009B7BD4 /* BattleFeedTableViewController.h */,
+				11A8F1DB1E9C34B2009B7BD4 /* BattleFeedTableViewController.m */,
+				11952DB81E9D8EF700D82608 /* userButton.m */,
+				11952DBA1E9D8F0400D82608 /* userButton.h */,
+				11952DBB1E9D900300D82608 /* userProfileTableViewController.h */,
+				11952DBC1E9D900300D82608 /* userProfileTableViewController.m */,
 				11A8F1E01E9C38D4009B7BD4 /* maiTabViewController.h */,
 				11A8F1E11E9C38D4009B7BD4 /* maiTabViewController.m */,
-				11A8F1DB1E9C34B2009B7BD4 /* BattleFeedTableViewController.m */,
 				11A8F1E31E9C38EB009B7BD4 /* profileTableViewController.h */,
 				11A8F1E41E9C38EB009B7BD4 /* profileTableViewController.m */,
 				11A8F1C91E9C3353009B7BD4 /* SecondViewController.h */,
@@ -173,11 +183,13 @@
 			files = (
 				11A8F1CB1E9C3353009B7BD4 /* SecondViewController.m in Sources */,
 				11A8F1C51E9C3353009B7BD4 /* AppDelegate.m in Sources */,
+				11952DB91E9D8EF700D82608 /* userButton.m in Sources */,
 				11A8F1E51E9C38EB009B7BD4 /* profileTableViewController.m in Sources */,
 				11A8F1E21E9C38D4009B7BD4 /* maiTabViewController.m in Sources */,
 				11A8F1DC1E9C34B2009B7BD4 /* BattleFeedTableViewController.m in Sources */,
 				11A8F1C81E9C3353009B7BD4 /* FirstViewController.m in Sources */,
 				11A8F1C21E9C3353009B7BD4 /* main.m in Sources */,
+				11952DBD1E9D900300D82608 /* userProfileTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -300,7 +312,7 @@
 				DEVELOPMENT_TEAM = 29T9RVU57K;
 				INFOPLIST_FILE = doudouapp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.doudouapp.doudou.doudouapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.doudouapp.doudou;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -312,7 +324,7 @@
 				DEVELOPMENT_TEAM = 29T9RVU57K;
 				INFOPLIST_FILE = doudouapp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.doudouapp.doudou.doudouapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.doudouapp.doudou;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
