@@ -9,6 +9,7 @@
 #import "startCaptureTableViewController.h"
 #import <UIKit/UIKit.h>
 #import <MobileCoreServices/MobileCoreServices.h> // needed for video types
+#import "sharedSingleton.h"
 
 @interface startCaptureTableViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @property (nonatomic, readwrite) NSInteger selectedCell;
@@ -96,6 +97,13 @@
     NSURL *videoURL = [info objectForKey:UIImagePickerControllerMediaURL];
     
     NSLog(@"VideoURL = %@", videoURL);
+    sharedSingleton *myShared = [sharedSingleton sharedManager];
+    if(self.selectedCell == 0){
+        myShared.redURL = videoURL;
+    }
+    if(self.selectedCell == 1){
+        myShared.blueURL = videoURL;
+    }
     self.fileURL[self.selectedCell] = [NSString stringWithFormat:@"%@", videoURL];
     [picker dismissViewControllerAnimated:YES completion:NULL];
     [self.tableView reloadData];

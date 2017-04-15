@@ -8,9 +8,12 @@
 
 #import "BattleFeedTableViewController.h"
 #import <UIKit/UIKit.h>
+#import <AVKit/AVKit.h>
+#import <AVFoundation/AVFoundation.h>
+#import <MediaPlayer/MediaPlayer.h>
 #import <MobileCoreServices/MobileCoreServices.h> // needed for video types
-
-@interface BattleFeedTableViewController ()<UIImagePickerControllerDelegate>
+#import "sharedSingleton.h"
+@interface BattleFeedTableViewController ()<UIImagePickerControllerDelegate, AVPlayerViewControllerDelegate>
 @property (nonatomic, readwrite, retain) NSArray *battleFeedDataArray;
 @end
 
@@ -53,6 +56,11 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void) viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [self.tableView reloadData];
 }
 
 -(void)addLibrary{
@@ -167,7 +175,7 @@
         make.centerY.equalTo(rightUser.mas_centerY);
         make.centerX.equalTo(cell.mas_centerX);
         make.width.greaterThanOrEqualTo(@10);
-        make.height.greaterThanOrEqualTo(@20);
+        make.height.equalTo(@20);
     }];
     
     UILabel *battleTitle = [[UILabel alloc] init];
@@ -180,6 +188,40 @@
         make.width.greaterThanOrEqualTo(@30);
         make.height.equalTo(@20);
     }];
+    
+    sharedSingleton *myshared = [sharedSingleton sharedManager];
+
+
+    if(myshared.redURL  != nil){
+        AVPlayer *redPlayer = [[AVPlayer alloc] initWithURL:myshared.redURL];
+        AVPlayerViewController *red_vc = [[AVPlayerViewController alloc] init];
+        red_vc.player = redPlayer;
+        
+        AVPlayer *bluePlayer = [[AVPlayer alloc] initWithURL:myshared.blueURL];
+        AVPlayerViewController *blue_vc = [[AVPlayerViewController alloc] init];
+        blue_vc.player = bluePlayer;
+        
+        [self addChildViewController:red_vc];
+        [self addChildViewController:blue_vc];
+        
+        [cell addSubview:red_vc.view];
+        [cell addSubview:blue_vc.view];
+        
+        [red_vc.view mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(VSLabel.mas_bottom).with.offset(5);
+            make.left.equalTo(cell.mas_left).with.offset(10);
+            make.right.equalTo(cell.mas_centerX);
+            make.height.equalTo(@280);
+        }];
+        [blue_vc.view mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(VSLabel.mas_bottom).with.offset(5);
+            make.left.equalTo(cell.mas_centerX).with.offset(10);
+            make.right.equalTo(cell.mas_right);
+            make.height.equalTo(@280);
+        }];
+
+        
+    }
     
     UILabel *leftVotes = [[UILabel alloc] init];
     UILabel *rightVotes = [[UILabel alloc] init];
@@ -307,8 +349,6 @@
         make.height.equalTo(@20);
     }];
     
-    
-
     
     // Configure the cell...
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
