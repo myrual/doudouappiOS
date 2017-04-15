@@ -30,16 +30,17 @@
     self.title = @"斗斗";
     
     FAKFontAwesome *cameraIcon = [FAKFontAwesome cameraIconWithSize:40];
+    [cameraIcon addAttribute:NSForegroundColorAttributeName value:[UIColor redColor]];
     UIButton *cameraButton = [[UIButton alloc] init];
-    [cameraButton setImage:[cameraIcon imageWithSize:CGSizeMake(66, 66)] forState:UIControlStateNormal];
+    [cameraButton setImage:[cameraIcon imageWithSize:CGSizeMake(50, 50)] forState:UIControlStateNormal];
     [cameraButton addTarget:self action:@selector(addLibrary) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:cameraButton];
     [cameraButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.view.mas_bottom);
         make.centerX.equalTo(self.tabBar.mas_centerX);
-        make.width.equalTo(@66);
-        make.height.equalTo(@66);
+        make.width.equalTo(@50);
+        make.height.equalTo(@50);
     }];
     // Do any additional setup after loading the view.
 }
