@@ -82,6 +82,14 @@
                 voteCellBattle.myVote = 1;
             }
             NSIndexSet *toReload = [NSIndexSet indexSetWithIndex:i];
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:true];
+            hud.mode = MBProgressHUDModeText;
+            [hud.label setText:@"感谢投票"];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                hud.hidden = true;
+            });
+            
+            
             [self.tableView reloadSections:toReload withRowAnimation:UITableViewRowAnimationNone];
         }
     }
@@ -107,14 +115,14 @@
     [cell addSubview:rightUser];
     [leftUser mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(cell.mas_top).with.offset(5);
-        make.left.equalTo(cell.mas_left).with.offset(5);
+        make.left.equalTo(cell.mas_left).with.offset(10);
         make.width.greaterThanOrEqualTo(@10);
         make.height.greaterThanOrEqualTo(@20);
     }];
     
     [rightUser mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(cell.mas_top).with.offset(5);
-        make.right.equalTo(cell.mas_right).with.offset(-5);
+        make.right.equalTo(cell.mas_right).with.offset(-10);
         make.width.greaterThanOrEqualTo(@10);
         make.height.greaterThanOrEqualTo(@20);
     }];
@@ -124,7 +132,7 @@
     
     [cell addSubview:VSLabel];
     [VSLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(cell.mas_top).with.offset(5);
+        make.centerY.equalTo(rightUser.mas_centerY);
         make.centerX.equalTo(cell.mas_centerX);
         make.width.greaterThanOrEqualTo(@10);
         make.height.greaterThanOrEqualTo(@20);
@@ -174,7 +182,7 @@
     [cell addSubview:leftThumbsUp];
     [leftThumbsUp mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(battleTitle.mas_top).with.offset(-5);
-        make.left.equalTo(cell.mas_left).with.offset(5);
+        make.left.equalTo(cell.mas_left).with.offset(10);
         make.width.equalTo(@30);
         make.height.equalTo(@30);
     }];
@@ -223,7 +231,7 @@
     [cell addSubview:rightThumbsUp];
     [rightThumbsUp mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(battleTitle.mas_top).with.offset(-5);
-        make.right.equalTo(cell.mas_right).with.offset(-5);
+        make.right.equalTo(cell.mas_right).with.offset(-10);
         make.width.equalTo(@30);
         make.height.equalTo(@30);
     }];

@@ -13,6 +13,7 @@
 #import "FAKFontAwesome.h"
 #import "voteButton.h"
 #import "DDBattleInfo.h"
+#import "MBProgressHUD.h"
 @interface BattleFeedTableViewController : UITableViewController
 
 @end

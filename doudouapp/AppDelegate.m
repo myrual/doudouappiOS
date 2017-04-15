@@ -17,6 +17,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     
+    
+
     BattleFeedTableViewController *feedvc = [[BattleFeedTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
     feedvc.title = @"Feed";
     FAKFontAwesome  *feedIcon = [FAKFontAwesome feedIconWithSize:20];
@@ -30,7 +32,10 @@
     maiTabViewController * rootvc = [[maiTabViewController alloc] init];
     NSArray *childvc = @[feedvc, profilevc];
     [rootvc setViewControllers:childvc];
-    self.window.rootViewController = rootvc;
+    
+    UINavigationController *vc = [[UINavigationController
+                                  alloc] initWithRootViewController:rootvc];
+    self.window.rootViewController = vc;
     //self.window.rootViewController = [[BattleFeedTableViewController alloc] initWithNibName:nil bundle:nil];
     
     
