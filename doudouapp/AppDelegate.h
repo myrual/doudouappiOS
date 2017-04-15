@@ -7,6 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BattleFeedTableViewController.h"
+#import "maiTabViewController.h"
+#import "profileTableViewController.h"
+#import "FAKFontAwesome.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

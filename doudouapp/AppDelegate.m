@@ -7,9 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "BattleFeedTableViewController.h"
-#import "maiTabViewController.h"
-#import "profileTableViewController.h"
 @interface AppDelegate ()
 
 @end
@@ -22,8 +19,14 @@
     
     BattleFeedTableViewController *feedvc = [[BattleFeedTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
     feedvc.title = @"Feed";
+    FAKFontAwesome  *feedIcon = [FAKFontAwesome feedIconWithSize:20];
+    UIImage *feedImage = [feedIcon imageWithSize:CGSizeMake(20, 20)];
+    feedvc.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Feed" image:feedImage tag:0];
     profileTableViewController *profilevc = [[profileTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
     profilevc.title = @"Profile";
+    FAKFontAwesome *userIcon = [FAKFontAwesome userOIconWithSize:20];
+    UIImage *userImage = [userIcon imageWithSize:CGSizeMake(20, 20)];
+    profilevc.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Profile" image:userImage tag:1];
     maiTabViewController * rootvc = [[maiTabViewController alloc] init];
     NSArray *childvc = @[feedvc, profilevc];
     [rootvc setViewControllers:childvc];

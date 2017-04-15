@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "userButton.h"
+#import "userProfileTableViewController.h"
+#import "Masonry.h"
+#import "FAKFontAwesome.h"
+#import "voteButton.h"
+#import "DDBattleInfo.h"
 @interface BattleFeedTableViewController : UITableViewController
 
 @end

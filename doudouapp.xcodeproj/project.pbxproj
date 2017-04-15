@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		113F91AC1EA036F0003FB0C0 /* voteButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 113F91AB1EA036F0003FB0C0 /* voteButton.m */; };
+		113F91AF1EA180FA003FB0C0 /* DDBattleInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 113F91AE1EA180FA003FB0C0 /* DDBattleInfo.m */; };
 		11952DB91E9D8EF700D82608 /* userButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 11952DB81E9D8EF700D82608 /* userButton.m */; };
 		11952DBD1E9D900300D82608 /* userProfileTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 11952DBC1E9D900300D82608 /* userProfileTableViewController.m */; };
 		11A8F1C21E9C3353009B7BD4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 11A8F1C11E9C3353009B7BD4 /* main.m */; };
@@ -19,9 +21,14 @@
 		11A8F1DC1E9C34B2009B7BD4 /* BattleFeedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 11A8F1DB1E9C34B2009B7BD4 /* BattleFeedTableViewController.m */; };
 		11A8F1E21E9C38D4009B7BD4 /* maiTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 11A8F1E11E9C38D4009B7BD4 /* maiTabViewController.m */; };
 		11A8F1E51E9C38EB009B7BD4 /* profileTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 11A8F1E41E9C38EB009B7BD4 /* profileTableViewController.m */; };
+		2435DF72E3B9AFAE8F3E7458 /* libPods-doudouapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56CCEE3C108B558951BADC1B /* libPods-doudouapp.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		113F91AA1EA036F0003FB0C0 /* voteButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = voteButton.h; sourceTree = "<group>"; };
+		113F91AB1EA036F0003FB0C0 /* voteButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = voteButton.m; sourceTree = "<group>"; };
+		113F91AD1EA180FA003FB0C0 /* DDBattleInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDBattleInfo.h; sourceTree = "<group>"; };
+		113F91AE1EA180FA003FB0C0 /* DDBattleInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDBattleInfo.m; sourceTree = "<group>"; };
 		11952DB81E9D8EF700D82608 /* userButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = userButton.m; sourceTree = "<group>"; };
 		11952DBA1E9D8F0400D82608 /* userButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = userButton.h; sourceTree = "<group>"; };
 		11952DBB1E9D900300D82608 /* userProfileTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = userProfileTableViewController.h; sourceTree = "<group>"; };
@@ -44,6 +51,9 @@
 		11A8F1E11E9C38D4009B7BD4 /* maiTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = maiTabViewController.m; sourceTree = "<group>"; };
 		11A8F1E31E9C38EB009B7BD4 /* profileTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = profileTableViewController.h; sourceTree = "<group>"; };
 		11A8F1E41E9C38EB009B7BD4 /* profileTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = profileTableViewController.m; sourceTree = "<group>"; };
+		56CCEE3C108B558951BADC1B /* libPods-doudouapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-doudouapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		844C87F6D5F113ABD486E6D4 /* Pods-doudouapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-doudouapp.release.xcconfig"; path = "Pods/Target Support Files/Pods-doudouapp/Pods-doudouapp.release.xcconfig"; sourceTree = "<group>"; };
+		984C6CB161579CBCB24F5BE0 /* Pods-doudouapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-doudouapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-doudouapp/Pods-doudouapp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2435DF72E3B9AFAE8F3E7458 /* libPods-doudouapp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,6 +73,8 @@
 			children = (
 				11A8F1BF1E9C3353009B7BD4 /* doudouapp */,
 				11A8F1BE1E9C3353009B7BD4 /* Products */,
+				1D9DF216CFEE6AF4180AC464 /* Pods */,
+				5F0135C893381563D06BC26C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -82,9 +95,13 @@
 				11A8F1C71E9C3353009B7BD4 /* FirstViewController.m */,
 				11A8F1DA1E9C34B2009B7BD4 /* BattleFeedTableViewController.h */,
 				11A8F1DB1E9C34B2009B7BD4 /* BattleFeedTableViewController.m */,
+				113F91AD1EA180FA003FB0C0 /* DDBattleInfo.h */,
+				113F91AE1EA180FA003FB0C0 /* DDBattleInfo.m */,
 				11952DB81E9D8EF700D82608 /* userButton.m */,
 				11952DBA1E9D8F0400D82608 /* userButton.h */,
 				11952DBB1E9D900300D82608 /* userProfileTableViewController.h */,
+				113F91AA1EA036F0003FB0C0 /* voteButton.h */,
+				113F91AB1EA036F0003FB0C0 /* voteButton.m */,
 				11952DBC1E9D900300D82608 /* userProfileTableViewController.m */,
 				11A8F1E01E9C38D4009B7BD4 /* maiTabViewController.h */,
 				11A8F1E11E9C38D4009B7BD4 /* maiTabViewController.m */,
@@ -109,6 +126,23 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		1D9DF216CFEE6AF4180AC464 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				984C6CB161579CBCB24F5BE0 /* Pods-doudouapp.debug.xcconfig */,
+				844C87F6D5F113ABD486E6D4 /* Pods-doudouapp.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		5F0135C893381563D06BC26C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				56CCEE3C108B558951BADC1B /* libPods-doudouapp.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -116,9 +150,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 11A8F1D71E9C3353009B7BD4 /* Build configuration list for PBXNativeTarget "doudouapp" */;
 			buildPhases = (
+				1B7B076952189A3B1A0E7712 /* [CP] Check Pods Manifest.lock */,
 				11A8F1B91E9C3353009B7BD4 /* Sources */,
 				11A8F1BA1E9C3353009B7BD4 /* Frameworks */,
 				11A8F1BB1E9C3353009B7BD4 /* Resources */,
+				D530986431848F0B83877ABA /* [CP] Embed Pods Frameworks */,
+				FF5153176B954F9653C521E5 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -176,15 +213,65 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		1B7B076952189A3B1A0E7712 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		D530986431848F0B83877ABA /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-doudouapp/Pods-doudouapp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FF5153176B954F9653C521E5 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-doudouapp/Pods-doudouapp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		11A8F1B91E9C3353009B7BD4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				11A8F1CB1E9C3353009B7BD4 /* SecondViewController.m in Sources */,
+				113F91AC1EA036F0003FB0C0 /* voteButton.m in Sources */,
 				11A8F1C51E9C3353009B7BD4 /* AppDelegate.m in Sources */,
 				11952DB91E9D8EF700D82608 /* userButton.m in Sources */,
 				11A8F1E51E9C38EB009B7BD4 /* profileTableViewController.m in Sources */,
+				113F91AF1EA180FA003FB0C0 /* DDBattleInfo.m in Sources */,
 				11A8F1E21E9C38D4009B7BD4 /* maiTabViewController.m in Sources */,
 				11A8F1DC1E9C34B2009B7BD4 /* BattleFeedTableViewController.m in Sources */,
 				11A8F1C81E9C3353009B7BD4 /* FirstViewController.m in Sources */,
@@ -307,6 +394,7 @@
 		};
 		11A8F1D81E9C3353009B7BD4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 984C6CB161579CBCB24F5BE0 /* Pods-doudouapp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 29T9RVU57K;
@@ -319,6 +407,7 @@
 		};
 		11A8F1D91E9C3353009B7BD4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 844C87F6D5F113ABD486E6D4 /* Pods-doudouapp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 29T9RVU57K;
