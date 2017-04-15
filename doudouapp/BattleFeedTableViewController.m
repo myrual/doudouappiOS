@@ -27,8 +27,8 @@
     first.leftUser = @"李林";
     first.rightUser = @"江南";
     first.battleTimeStamp = NSTimeIntervalSince1970;
-    first.leftVotes = 1;
-    first.rightVotes = 10;
+    first.leftVotes = 5;
+    first.rightVotes = 5;
     DDBattleInfo *seconds = [[DDBattleInfo alloc] init];
     seconds.battleTitle = @"RapGod";
     seconds.battleID = @"2222";
@@ -42,7 +42,7 @@
     UIButton *addButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
     [addButton addTarget:self action:@selector(addLibrary) forControlEvents:UIControlEventTouchUpInside];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStyleDone target:self action:@selector(addLibrary)];
+    //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStyleDone target:self action:@selector(addLibrary)];
     
     self.title = @"Feed";
     
@@ -209,18 +209,16 @@
         
         [red_vc.view mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(VSLabel.mas_bottom).with.offset(5);
-            make.left.equalTo(cell.mas_left).with.offset(10);
+            make.left.equalTo(cell.mas_left);
             make.right.equalTo(cell.mas_centerX);
             make.height.equalTo(@280);
         }];
         [blue_vc.view mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(VSLabel.mas_bottom).with.offset(5);
-            make.left.equalTo(cell.mas_centerX).with.offset(10);
+            make.left.equalTo(cell.mas_centerX);
             make.right.equalTo(cell.mas_right);
             make.height.equalTo(@280);
         }];
-
-        
     }
     
     UILabel *leftVotes = [[UILabel alloc] init];
@@ -335,10 +333,37 @@
     [cell addSubview:progressRed];
     [cell addSubview:progressBlue];
     
+    CGFloat totalVotes = 1.0 * thisBattleInfo.leftVotes + thisBattleInfo.rightVotes * 1.0;
+    CGFloat percentage = 0;
+    if(thisBattleInfo.leftVotes /totalVotes < 0.1){
+        percentage = 1;
+    }else if(thisBattleInfo.leftVotes/totalVotes < 0.2){
+        percentage = 2;
+    }else if(thisBattleInfo.leftVotes/totalVotes < 0.3){
+        percentage = 3;
+    }else if(thisBattleInfo.leftVotes/totalVotes < 0.4){
+        percentage = 4;
+    }else if(thisBattleInfo.leftVotes/totalVotes < 0.5){
+        percentage = 5;
+    }else if(thisBattleInfo.leftVotes/totalVotes < 0.6){
+        percentage = 6;
+    }else if(thisBattleInfo.leftVotes/totalVotes < 0.7){
+        percentage = 7;
+    }else if(thisBattleInfo.leftVotes/totalVotes < 0.8){
+        percentage = 8;
+    }else if(thisBattleInfo.leftVotes/totalVotes < 0.9){
+        percentage = 9;
+    }else{
+        percentage = 10;
+    }
+
+    CGFloat everySpace = ([UIScreen mainScreen].bounds.size.width - 160)/10;
+    CGFloat totalBlueSpace = percentage * everySpace;
+    NSLog(@"totalBlue space is %f", totalBlueSpace);
     [progressBlue mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(leftVotes.mas_bottom);
         make.left.equalTo(leftVotes.mas_right).with.offset(5);
-        make.width.equalTo(@20);
+        make.width.mas_equalTo(totalBlueSpace);
         make.height.equalTo(@20);
     }];
 

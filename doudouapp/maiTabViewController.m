@@ -8,8 +8,10 @@
 
 #import "maiTabViewController.h"
 #import "startCaptureTableViewController.h"
-@interface maiTabViewController ()
+#import "FAKFontAwesome.h"
+#import "Masonry.h"
 
+@interface maiTabViewController ()
 @end
 
 @implementation maiTabViewController
@@ -19,8 +21,26 @@
     UIButton *addButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
     [addButton addTarget:self action:@selector(addLibrary) forControlEvents:UIControlEventTouchUpInside];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStyleDone target:self action:@selector(addLibrary)];
+
+    FAKFontAwesome *addFont = [FAKFontAwesome plusIconWithSize:20];
+    UIBarButtonItem *plusButton = [[UIBarButtonItem alloc] initWithImage:[addFont imageWithSize:CGSizeMake(20, 20)] style:UIBarButtonItemStyleDone target:self action:@selector(addLibrary)];
+    
+    //self.navigationItem.rightBarButtonItem = plusButton;
+    
     self.title = @"斗斗";
+    
+    FAKFontAwesome *cameraIcon = [FAKFontAwesome cameraIconWithSize:40];
+    UIButton *cameraButton = [[UIButton alloc] init];
+    [cameraButton setImage:[cameraIcon imageWithSize:CGSizeMake(66, 66)] forState:UIControlStateNormal];
+    [cameraButton addTarget:self action:@selector(addLibrary) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:cameraButton];
+    [cameraButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.view.mas_bottom);
+        make.centerX.equalTo(self.tabBar.mas_centerX);
+        make.width.equalTo(@66);
+        make.height.equalTo(@66);
+    }];
     // Do any additional setup after loading the view.
 }
 -(void)addLibrary{
