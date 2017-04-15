@@ -7,7 +7,7 @@
 //
 
 #import "maiTabViewController.h"
-
+#import "startCaptureTableViewController.h"
 @interface maiTabViewController ()
 
 @end
@@ -16,9 +16,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    UIButton *addButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+    [addButton addTarget:self action:@selector(addLibrary) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStyleDone target:self action:@selector(addLibrary)];
+    self.title = @"斗斗";
     // Do any additional setup after loading the view.
 }
-
+-(void)addLibrary{
+    startCaptureTableViewController *vc = [[startCaptureTableViewController alloc] init];
+    [self.navigationController pushViewController: vc animated:true];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

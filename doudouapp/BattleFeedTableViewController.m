@@ -7,9 +7,10 @@
 //
 
 #import "BattleFeedTableViewController.h"
+#import <UIKit/UIKit.h>
+#import <MobileCoreServices/MobileCoreServices.h> // needed for video types
 
-
-@interface BattleFeedTableViewController ()
+@interface BattleFeedTableViewController ()<UIImagePickerControllerDelegate>
 @property (nonatomic, readwrite, retain) NSArray *battleFeedDataArray;
 @end
 
@@ -35,6 +36,11 @@
     seconds.rightVotes = 10;
     self.battleFeedDataArray = [NSArray arrayWithObjects:first, seconds, nil];
     
+    UIButton *addButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+    [addButton addTarget:self action:@selector(addLibrary) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"+" style:UIBarButtonItemStyleDone target:self action:@selector(addLibrary)];
+    
     self.title = @"Feed";
     
     // Uncomment the following line to preserve selection between presentations.
@@ -47,6 +53,32 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)addLibrary{
+    // Present videos from which to choose
+    UIImagePickerController *videoPicker = [[UIImagePickerController alloc] init];
+    videoPicker.delegate = self; // ensure you set the delegate so when a video is chosen the right method can be called
+    
+    videoPicker.modalPresentationStyle = UIModalPresentationCurrentContext;
+    // This code ensures only videos are shown to the end user
+    videoPicker.mediaTypes = @[(NSString*)kUTTypeMovie, (NSString*)kUTTypeAVIMovie, (NSString*)kUTTypeVideo, (NSString*)kUTTypeMPEG4];
+    
+    videoPicker.videoQuality = UIImagePickerControllerQualityTypeHigh;
+    [self presentViewController:videoPicker animated:YES completion:nil];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    // This is the NSURL of the video object
+    NSURL *videoURL = [info objectForKey:UIImagePickerControllerMediaURL];
+    
+    NSLog(@"VideoURL = %@", videoURL);
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
 #pragma mark - Table view data source

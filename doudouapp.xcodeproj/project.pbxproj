@@ -11,6 +11,7 @@
 		113F91AF1EA180FA003FB0C0 /* DDBattleInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 113F91AE1EA180FA003FB0C0 /* DDBattleInfo.m */; };
 		11952DB91E9D8EF700D82608 /* userButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 11952DB81E9D8EF700D82608 /* userButton.m */; };
 		11952DBD1E9D900300D82608 /* userProfileTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 11952DBC1E9D900300D82608 /* userProfileTableViewController.m */; };
+		119B5AFF1EA1F4EF00A8BEBF /* startCaptureTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 119B5AFE1EA1F4EF00A8BEBF /* startCaptureTableViewController.m */; };
 		11A8F1C21E9C3353009B7BD4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 11A8F1C11E9C3353009B7BD4 /* main.m */; };
 		11A8F1C51E9C3353009B7BD4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 11A8F1C41E9C3353009B7BD4 /* AppDelegate.m */; };
 		11A8F1C81E9C3353009B7BD4 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 11A8F1C71E9C3353009B7BD4 /* FirstViewController.m */; };
@@ -33,6 +34,8 @@
 		11952DBA1E9D8F0400D82608 /* userButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = userButton.h; sourceTree = "<group>"; };
 		11952DBB1E9D900300D82608 /* userProfileTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = userProfileTableViewController.h; sourceTree = "<group>"; };
 		11952DBC1E9D900300D82608 /* userProfileTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = userProfileTableViewController.m; sourceTree = "<group>"; };
+		119B5AFD1EA1F4EF00A8BEBF /* startCaptureTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = startCaptureTableViewController.h; sourceTree = "<group>"; };
+		119B5AFE1EA1F4EF00A8BEBF /* startCaptureTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = startCaptureTableViewController.m; sourceTree = "<group>"; };
 		11A8F1BD1E9C3353009B7BD4 /* doudouapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = doudouapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11A8F1C11E9C3353009B7BD4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		11A8F1C31E9C3353009B7BD4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -95,6 +98,8 @@
 				11A8F1C71E9C3353009B7BD4 /* FirstViewController.m */,
 				11A8F1DA1E9C34B2009B7BD4 /* BattleFeedTableViewController.h */,
 				11A8F1DB1E9C34B2009B7BD4 /* BattleFeedTableViewController.m */,
+				119B5AFD1EA1F4EF00A8BEBF /* startCaptureTableViewController.h */,
+				119B5AFE1EA1F4EF00A8BEBF /* startCaptureTableViewController.m */,
 				113F91AD1EA180FA003FB0C0 /* DDBattleInfo.h */,
 				113F91AE1EA180FA003FB0C0 /* DDBattleInfo.m */,
 				11952DB81E9D8EF700D82608 /* userButton.m */,
@@ -277,6 +282,7 @@
 				11A8F1C81E9C3353009B7BD4 /* FirstViewController.m in Sources */,
 				11A8F1C21E9C3353009B7BD4 /* main.m in Sources */,
 				11952DBD1E9D900300D82608 /* userProfileTableViewController.m in Sources */,
+				119B5AFF1EA1F4EF00A8BEBF /* startCaptureTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
