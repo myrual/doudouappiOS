@@ -271,7 +271,7 @@
     [progressRed mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(rightVotes.mas_bottom);
         make.right.equalTo(rightVotes.mas_left).with.offset(-5);
-        make.width.equalTo(@120);
+        make.left.equalTo(leftVotes.mas_right).with.offset(5);
         make.height.equalTo(@20);
     }];
     
@@ -285,7 +285,7 @@
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return UIScreen.mainScreen.bounds.size.width;
+    return UIScreen.mainScreen.bounds.size.width + 40;
 }
 /*
  // Override to support conditional editing of the table view.
