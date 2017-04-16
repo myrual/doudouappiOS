@@ -11,5 +11,6 @@
 @interface guessYouLikeElement: NSObject
 @property (nonatomic, strong, readwrite) NSString *userID;
 @property (nonatomic, strong, readwrite) NSString *userName;
+@property (nonatomic, readwrite) BOOL followed;
 @end
 #endif /* guessYouLikeElement_h */

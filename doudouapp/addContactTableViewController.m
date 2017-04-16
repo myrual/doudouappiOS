@@ -24,9 +24,11 @@
     
     firstGuess.userID = @"111";
     firstGuess.userName = @"DrDre";
+    firstGuess.followed = true;
     
     secondGuess.userID = @"222";
     secondGuess.userName = @"Jay-Z";
+    secondGuess.followed = true;
     
     [self.guessYouLike addObject:firstGuess];
     [self.guessYouLike addObject:secondGuess];
@@ -51,10 +53,10 @@
 
 -(NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
     if (section == 0) {
-        return nil;
+        return @"邀请朋友一起玩";
     }
     if (section == 1) {
-        return @"猜你喜欢";
+        return @"推荐你关注";
     }
     return nil;
 }
@@ -79,7 +81,7 @@
 
             NSAttributedString * weChatIconString = [wechatIcon attributedString];
             NSMutableAttributedString *wechatTitle = [[NSMutableAttributedString alloc] initWithAttributedString:weChatIconString];
-            NSAttributedString *addFrom = [[NSMutableAttributedString alloc] initWithString:@"从微信添加"];
+            NSAttributedString *addFrom = [[NSMutableAttributedString alloc] initWithString:@" 从微信添加"];
             [wechatTitle appendAttributedString:addFrom];
             [cell.textLabel setAttributedText:wechatTitle];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -90,7 +92,7 @@
             
             NSAttributedString * weiboIconString = [weiboIcon attributedString];
             NSMutableAttributedString *weiboTitle = [[NSMutableAttributedString alloc] initWithAttributedString:weiboIconString];
-            NSAttributedString *addFrom = [[NSMutableAttributedString alloc] initWithString:@"从微博添加"];
+            NSAttributedString *addFrom = [[NSMutableAttributedString alloc] initWithString:@" 从微博添加"];
             [weiboTitle appendAttributedString:addFrom];
             [cell.textLabel setAttributedText:weiboTitle];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -101,7 +103,7 @@
             
             NSAttributedString * qqIconString = [qqIcon attributedString];
             NSMutableAttributedString *qqTitle = [[NSMutableAttributedString alloc] initWithAttributedString:qqIconString];
-            NSAttributedString *addFrom = [[NSMutableAttributedString alloc] initWithString:@"从QQ添加"];
+            NSAttributedString *addFrom = [[NSMutableAttributedString alloc] initWithString:@" 从QQ添加"];
             [qqTitle appendAttributedString:addFrom];
             [cell.textLabel setAttributedText:qqTitle];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -110,7 +112,11 @@
     if(indexPath.section == 1){
         guessYouLikeElement *thisElement = [self.guessYouLike objectAtIndex:indexPath.row];
         [cell.textLabel setText: thisElement.userName];
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        if (thisElement.followed) {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }else{
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
     }
     
     // Configure the cell...
@@ -118,6 +124,26 @@
     return cell;
 }
 
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.section == 0) {
+        if (indexPath.row == 0) {
+            NSLog(@"wechat");
+        }
+        if (indexPath.row == 1) {
+            NSLog(@"wechat");
+        }
+        if (indexPath.row == 2) {
+            NSLog(@"wechat");
+        }
+    }
+    if (indexPath.section == 1) {
+        guessYouLikeElement *thisElement = [self.guessYouLike objectAtIndex:indexPath.row];
+        thisElement.followed = !thisElement.followed;
+        [self.tableView beginUpdates];
+        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView endUpdates];
+    }
+}
 
 /*
 // Override to support conditional editing of the table view.
