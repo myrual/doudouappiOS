@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DDBattleInfo : UIButton
+@interface DDBattleInfo : NSObject
 @property (nonatomic, strong, readwrite) NSString *leftUser;
 @property (nonatomic, strong, readwrite) NSString *rightUser;
 @property (nonatomic, strong, readwrite) NSString *battleTitle;

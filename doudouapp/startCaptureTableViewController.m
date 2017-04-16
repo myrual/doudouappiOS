@@ -24,7 +24,8 @@
     self.fileURL = [[NSMutableArray alloc] initWithCapacity:2];
     self.fileURL[0] = @"选择红队视频";
     self.fileURL[1] = @"选择蓝队视频";
-    
+    self.fileURL[2] = @"选择红队头像";
+    self.fileURL[3] = @"选择蓝队头像";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStylePlain target:self action:@selector(captureDone)];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -50,7 +51,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 2;
+    return 4;
 }
 
 
@@ -61,6 +62,14 @@
         [cell setBackgroundColor:[UIColor redColor]];
     }
     if(indexPath.row == 1){
+        [cell.textLabel setText:[self.fileURL objectAtIndex:indexPath.row]];
+        [cell setBackgroundColor:[UIColor blueColor]];
+    }
+    if(indexPath.row == 2){
+        [cell.textLabel setText:[self.fileURL objectAtIndex:indexPath.row]];
+        [cell setBackgroundColor:[UIColor redColor]];
+    }
+    if(indexPath.row == 3){
         [cell.textLabel setText:[self.fileURL objectAtIndex:indexPath.row]];
         [cell setBackgroundColor:[UIColor blueColor]];
     }
@@ -85,24 +94,46 @@
     
     videoPicker.modalPresentationStyle = UIModalPresentationCurrentContext;
     // This code ensures only videos are shown to the end user
+    if(self.selectedCell == 0 || self.selectedCell == 1){
     videoPicker.mediaTypes = @[(NSString*)kUTTypeMovie, (NSString*)kUTTypeAVIMovie, (NSString*)kUTTypeVideo, (NSString*)kUTTypeMPEG4];
     
     videoPicker.videoQuality = UIImagePickerControllerQualityTypeHigh;
+    }else{
+        videoPicker.mediaTypes = @[(NSString *)kUTTypeImage, (NSString *)kUTTypePNG, (NSString *)kUTTypeJPEG, (NSString *)kUTTypeJPEG2000];
+        
+    }
     [self presentViewController:videoPicker animated:YES completion:nil];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
     // This is the NSURL of the video object
-    NSURL *videoURL = [info objectForKey:UIImagePickerControllerMediaURL];
-    
-    NSLog(@"VideoURL = %@", videoURL);
+    NSURL *videoURL =  nil;
     sharedSingleton *myShared = [sharedSingleton sharedManager];
     if(self.selectedCell == 0){
+        videoURL = [info objectForKey:UIImagePickerControllerMediaURL];
+        
+        NSLog(@"VideoURL = %@", videoURL);
         myShared.redURL = videoURL;
     }
     if(self.selectedCell == 1){
+        videoURL = [info objectForKey:UIImagePickerControllerMediaURL];
+        
+        NSLog(@"VideoURL = %@", videoURL);
         myShared.blueURL = videoURL;
+    }
+    if(self.selectedCell == 2){
+        videoURL = [info objectForKey:UIImagePickerControllerOriginalImage];
+        
+        NSLog(@"VideoURL = %@", videoURL);
+        myShared.redAvatar = [info objectForKey:UIImagePickerControllerOriginalImage];
+    }
+    if(self.selectedCell == 3){
+        videoURL = [info objectForKey:UIImagePickerControllerOriginalImage];
+        
+        NSLog(@"VideoURL = %@", videoURL);
+
+        myShared.blueAvatar = [info objectForKey:UIImagePickerControllerOriginalImage];
     }
     self.fileURL[self.selectedCell] = [NSString stringWithFormat:@"%@", videoURL];
     [picker dismissViewControllerAnimated:YES completion:NULL];

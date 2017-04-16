@@ -136,6 +136,9 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    sharedSingleton *myshared = [sharedSingleton sharedManager];
+
     //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"feed" forIndexPath:indexPath];
     DDBattleInfo *thisBattleInfo = [self.battleFeedDataArray objectAtIndex:indexPath.section];
     UITableViewCell *cell = [[UITableViewCell alloc] init];
@@ -153,22 +156,63 @@
     
     [cell addSubview:leftUser];
     [cell addSubview:rightUser];
-    [leftUser mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(cell.mas_top).with.offset(5);
-        make.left.equalTo(cell.mas_left).with.offset(10);
-        make.width.greaterThanOrEqualTo(@10);
-        make.height.greaterThanOrEqualTo(@20);
-    }];
-    
-    [rightUser mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(cell.mas_top).with.offset(5);
-        make.right.equalTo(cell.mas_right).with.offset(-10);
-        make.width.greaterThanOrEqualTo(@10);
-        make.height.greaterThanOrEqualTo(@20);
-    }];
+    if(myshared.redAvatar != nil && myshared.blueAvatar != nil){
+        UIImageView *leftUserAvatar = [[UIImageView alloc] initWithImage:myshared.blueAvatar];
+        leftUserAvatar.layer.cornerRadius = 15;
+        leftUserAvatar.layer.masksToBounds = YES;
+        UIImageView *rightUserAvatar = [[UIImageView alloc] initWithImage:myshared.redAvatar];
+        rightUserAvatar.layer.cornerRadius = 15;
+        rightUserAvatar.layer.masksToBounds = YES;
+        [cell addSubview:leftUserAvatar];
+        [cell addSubview:rightUserAvatar];
+        
+        [leftUserAvatar mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(cell.mas_top).with.offset(5);
+            make.left.equalTo(cell.mas_left).with.offset(10);
+            make.width.equalTo(@30);
+            make.height.equalTo(@30);
+        }];
+        
+        [rightUserAvatar mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(cell.mas_top).with.offset(5);
+            make.right.equalTo(cell.mas_right).with.offset(-10);
+            make.width.equalTo(@30);
+            make.height.equalTo(@30);
+        }];
+        
+        [leftUser mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(leftUserAvatar.mas_top).with.offset(5);
+            make.left.equalTo(leftUserAvatar.mas_right).with.offset(10);
+            make.width.greaterThanOrEqualTo(@10);
+            make.height.equalTo(@30);
+        }];
+        
+        [rightUser mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(rightUserAvatar.mas_top).with.offset(5);
+            make.right.equalTo(rightUserAvatar.mas_left).with.offset(-10);
+            make.width.greaterThanOrEqualTo(@10);
+            make.height.greaterThanOrEqualTo(@30);
+        }];
+        
+    }else{
+        [leftUser mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(cell.mas_top).with.offset(5);
+            make.left.equalTo(cell.mas_left).with.offset(10);
+            make.width.greaterThanOrEqualTo(@10);
+            make.height.greaterThanOrEqualTo(@20);
+        }];
+        
+        [rightUser mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(cell.mas_top).with.offset(5);
+            make.right.equalTo(cell.mas_right).with.offset(-10);
+            make.width.greaterThanOrEqualTo(@10);
+            make.height.greaterThanOrEqualTo(@20);
+        }];
+    }
     
     UILabel *VSLabel = [[UILabel alloc] init];
     [VSLabel setText:@"VS"];
+    [VSLabel setTextColor:[UIColor redColor]];
     
     [cell addSubview:VSLabel];
     [VSLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -189,10 +233,9 @@
         make.height.equalTo(@20);
     }];
     
-    sharedSingleton *myshared = [sharedSingleton sharedManager];
 
 
-    if(myshared.redURL  != nil){
+    if(myshared.redURL  != nil && myshared.blueURL != nil){
         AVPlayer *redPlayer = [[AVPlayer alloc] initWithURL:myshared.redURL];
         AVPlayerViewController *red_vc = [[AVPlayerViewController alloc] init];
         red_vc.player = redPlayer;
@@ -266,8 +309,8 @@
     rightThumbsUp.needMirror = true;
     rightThumbsUp.battleID = thisBattleInfo.battleID;
     rightThumbsUp.userID = thisBattleInfo.rightUser;
-    UIImage * rightThumb = [UIImage imageWithCGImage:[redThumbsUp imageWithSize:CGSizeMake(20, 20)].CGImage scale:1 orientation:UIImageOrientationUpMirrored];
-    UIImage * rightthumb_unselect = [UIImage imageWithCGImage:[whiteThumbsUp_unselect imageWithSize:CGSizeMake(20, 20)].CGImage scale:1 orientation:UIImageOrientationUpMirrored];
+    UIImage * rightThumb = [UIImage imageWithCGImage:[redThumbsUp imageWithSize:CGSizeMake(20, 20)].CGImage scale:1.2 orientation:UIImageOrientationUpMirrored];
+    UIImage * rightthumb_unselect = [UIImage imageWithCGImage:[whiteThumbsUp_unselect imageWithSize:CGSizeMake(20, 20)].CGImage scale:1.2 orientation:UIImageOrientationUpMirrored];
 
     leftThumbsUp.hidden = false;
     rightThumbsUp.hidden = false;
@@ -334,30 +377,9 @@
     [cell addSubview:progressBlue];
     
     CGFloat totalVotes = 1.0 * thisBattleInfo.leftVotes + thisBattleInfo.rightVotes * 1.0;
-    CGFloat percentage = 0;
-    if(thisBattleInfo.leftVotes /totalVotes < 0.1){
-        percentage = 1;
-    }else if(thisBattleInfo.leftVotes/totalVotes < 0.2){
-        percentage = 2;
-    }else if(thisBattleInfo.leftVotes/totalVotes < 0.3){
-        percentage = 3;
-    }else if(thisBattleInfo.leftVotes/totalVotes < 0.4){
-        percentage = 4;
-    }else if(thisBattleInfo.leftVotes/totalVotes < 0.5){
-        percentage = 5;
-    }else if(thisBattleInfo.leftVotes/totalVotes < 0.6){
-        percentage = 6;
-    }else if(thisBattleInfo.leftVotes/totalVotes < 0.7){
-        percentage = 7;
-    }else if(thisBattleInfo.leftVotes/totalVotes < 0.8){
-        percentage = 8;
-    }else if(thisBattleInfo.leftVotes/totalVotes < 0.9){
-        percentage = 9;
-    }else{
-        percentage = 10;
-    }
+    CGFloat percentage = thisBattleInfo.leftVotes * 100.0 /totalVotes;
 
-    CGFloat everySpace = ([UIScreen mainScreen].bounds.size.width - 160)/10;
+    CGFloat everySpace = ([UIScreen mainScreen].bounds.size.width - 160)/ 100 *1.0;
     CGFloat totalBlueSpace = percentage * everySpace;
     NSLog(@"totalBlue space is %f", totalBlueSpace);
     [progressBlue mas_makeConstraints:^(MASConstraintMaker *make) {

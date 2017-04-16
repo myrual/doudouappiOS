@@ -10,7 +10,7 @@
 #import "startCaptureTableViewController.h"
 #import "FAKFontAwesome.h"
 #import "Masonry.h"
-
+#import "addContactTableViewController.h"
 @interface maiTabViewController ()
 @end
 
@@ -23,9 +23,9 @@
     
 
     FAKFontAwesome *addFont = [FAKFontAwesome plusIconWithSize:20];
-    UIBarButtonItem *plusButton = [[UIBarButtonItem alloc] initWithImage:[addFont imageWithSize:CGSizeMake(20, 20)] style:UIBarButtonItemStyleDone target:self action:@selector(addLibrary)];
+    UIBarButtonItem *plusButton = [[UIBarButtonItem alloc] initWithImage:[addFont imageWithSize:CGSizeMake(20, 20)] style:UIBarButtonItemStyleDone target:self action:@selector(addContact)];
     
-    //self.navigationItem.rightBarButtonItem = plusButton;
+    self.navigationItem.rightBarButtonItem = plusButton;
     
     self.title = @"斗斗";
     
@@ -44,6 +44,11 @@
     }];
     // Do any additional setup after loading the view.
 }
+-(void)addContact{
+    addContactTableViewController *vc = [[addContactTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    [self.navigationController pushViewController: vc animated:true];
+}
+
 -(void)addLibrary{
     startCaptureTableViewController *vc = [[startCaptureTableViewController alloc] init];
     [self.navigationController pushViewController: vc animated:true];
