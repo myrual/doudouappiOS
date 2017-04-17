@@ -13,6 +13,8 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import <MobileCoreServices/MobileCoreServices.h> // needed for video types
 #import "sharedSingleton.h"
+#import "RegLoginViewController.h"
+
 @interface BattleFeedTableViewController ()<UIImagePickerControllerDelegate, AVPlayerViewControllerDelegate>
 @property (nonatomic, readwrite, retain) NSArray *battleFeedDataArray;
 @end
@@ -107,6 +109,14 @@
 }
 
 -(void) voteFor:(voteButton *) sender{
+    
+    sharedSingleton *myshared = [sharedSingleton sharedManager];
+    if (myshared.isLoggedIn == false) {
+        RegLoginViewController *vc = [[RegLoginViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:true];
+        return;
+    }
+    
     NSLog(@"jumpto");
     userProfileTableViewController *vc = [[userProfileTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
     vc.userName = sender.battleID;

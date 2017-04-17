@@ -18,6 +18,7 @@
 
 @property (nonatomic, retain, readwrite) UIImage *redAvatar;
 @property (nonatomic, retain, readwrite) UIImage *blueAvatar;
+@property (nonatomic, readwrite) BOOL isLoggedIn;
 
 + (id)sharedManager;
 

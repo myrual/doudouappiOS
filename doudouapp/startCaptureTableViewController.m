@@ -95,9 +95,12 @@
     videoPicker.modalPresentationStyle = UIModalPresentationCurrentContext;
     // This code ensures only videos are shown to the end user
     if(self.selectedCell == 0 || self.selectedCell == 1){
-    videoPicker.mediaTypes = @[(NSString*)kUTTypeMovie, (NSString*)kUTTypeAVIMovie, (NSString*)kUTTypeVideo, (NSString*)kUTTypeMPEG4];
-    
-    videoPicker.videoQuality = UIImagePickerControllerQualityTypeHigh;
+        
+        videoPicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        videoPicker.videoQuality = UIImagePickerControllerQualityType640x480;
+        videoPicker.mediaTypes = @[(NSString*)kUTTypeMovie, (NSString*)kUTTypeAVIMovie, (NSString*)kUTTypeVideo, (NSString*)kUTTypeMPEG4];
+        
+        videoPicker.videoQuality = UIImagePickerControllerQualityTypeHigh;
     }else{
         videoPicker.mediaTypes = @[(NSString *)kUTTypeImage, (NSString *)kUTTypePNG, (NSString *)kUTTypeJPEG, (NSString *)kUTTypeJPEG2000];
         
