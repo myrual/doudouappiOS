@@ -8,6 +8,8 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>upyun_release</key>
+			<string>http://dd-doudouapp-com.b0.upaiyun.com</string>
 			<key>upyun</key>
 			<string>http://videopk-heroku-lilin.b0.upaiyun.com</string>
 		</dict>

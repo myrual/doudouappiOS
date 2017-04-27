@@ -55,11 +55,14 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    NSString *LoginURLString = @"https://dry-fjord-76939.herokuapp.com/users/sign_in.json";
-    NSString *feedURLString = @"https://dry-fjord-76939.herokuapp.com/api/v1/battles.json";
+    
+    //NSString *finalURLString = @"https://dd.doudouapp.com";
+    NSString *finalURLString = @"https://dry-fjord-76939.herokuapp.com/";
+    NSString *loginURLString = [finalURLString stringByAppendingString:@"/users/sign_in.json"];
+    NSString *feedURLString = [finalURLString stringByAppendingString:@"/api/v1/battles.json"];
     NSDictionary *parameters = @{@"appid": @"app123", @"appsecret":@"333", @"email": @"admin@test.com",@"password":@"123456"};
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    [manager POST:LoginURLString parameters:parameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+    [manager POST:loginURLString parameters:parameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         NSDictionary *response = responseObject;
 
@@ -207,11 +210,17 @@
     [cell addSubview:rightUser];
     if(thisBattleInfo.leftImage != nil && thisBattleInfo.rightImage != nil){
         UIImageView *leftUserAvatar = [[UIImageView alloc] init];
-        [leftUserAvatar setImageWithURL:[NSURL URLWithString:thisBattleInfo.leftImage]];
+        NSURL *leftURL = [NSURL URLWithString:[thisBattleInfo.leftImage stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
+    
+
+        
+        [leftUserAvatar setImageWithURL:leftURL];
         leftUserAvatar.layer.cornerRadius = 15;
         leftUserAvatar.layer.masksToBounds = YES;
         UIImageView *rightUserAvatar = [[UIImageView alloc] init];
-        [rightUserAvatar setImageWithURL:[NSURL URLWithString:thisBattleInfo.rightImage]];
+        NSURL *rightURL = [NSURL URLWithString:[thisBattleInfo.rightImage stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
+
+        [rightUserAvatar setImageWithURL:rightURL];
         rightUserAvatar.layer.cornerRadius = 15;
         rightUserAvatar.layer.masksToBounds = YES;
         [cell addSubview:leftUserAvatar];
@@ -287,11 +296,14 @@
 
 
     if(thisBattleInfo.leftVideo != nil && thisBattleInfo.rightVideo){
-        AVPlayer *redPlayer = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:thisBattleInfo.leftVideo]];
+        NSURL *leftURL = [NSURL URLWithString:[thisBattleInfo.leftVideo stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
+        AVPlayer *redPlayer = [[AVPlayer alloc] initWithURL:leftURL];
         AVPlayerViewController *red_vc = [[AVPlayerViewController alloc] init];
         red_vc.player = redPlayer;
-        
-        AVPlayer *bluePlayer = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:thisBattleInfo.rightVideo]];
+
+        NSURL *rightURL = [NSURL URLWithString:[thisBattleInfo.rightVideo stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
+
+        AVPlayer *bluePlayer = [[AVPlayer alloc] initWithURL:rightURL];
         AVPlayerViewController *blue_vc = [[AVPlayerViewController alloc] init];
         blue_vc.player = bluePlayer;
         
