@@ -14,8 +14,8 @@
 @property (nonatomic, strong, readwrite) NSString *battleTitle;
 @property (nonatomic, strong, readwrite) NSString *battleID;
 @property (nonatomic, readwrite) NSTimeInterval battleTimeStamp;
-@property (nonatomic, readwrite) NSInteger leftVotes;
-@property (nonatomic, readwrite) NSInteger rightVotes;
+@property (nonatomic, readwrite) int leftVotes;
+@property (nonatomic, readwrite) int rightVotes;
 @property (nonatomic, readwrite) NSInteger myVote;
 @property (nonatomic, readwrite) NSString *leftImage;
 @property (nonatomic, readwrite) NSString *leftVideo;

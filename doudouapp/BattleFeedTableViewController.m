@@ -83,8 +83,8 @@
             fetched.leftUser = @"李林";
             fetched.rightUser = @"江南";
             fetched.battleTimeStamp = NSTimeIntervalSince1970;
-            fetched.leftVotes = 5;
-            fetched.rightVotes = 5;
+            fetched.leftVotes = [[battleFeedResponse objectForKey:@"leftCount"] integerValue];
+            fetched.rightVotes = [[battleFeedResponse objectForKey:@"rightCount"] integerValue];
             fetched.leftImage = [battleFeedResponse objectForKey:@"leftImage"];
             fetched.leftVideo = [battleFeedResponse objectForKey:@"leftVideo"];
             fetched.rightImage = [battleFeedResponse objectForKey:@"rightImage"];
@@ -176,6 +176,27 @@
     NSLog(@"vote url is %@ with parameter %@", voteURL, tokenparameters);
     [manager POST:voteURL parameters:tokenparameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
+        NSDictionary *responseDict = responseObject;
+        NSNumber *statusCode = [responseDict objectForKey:@"status"];
+        if([statusCode integerValue] == 200){
+            NSDictionary *battleFeedResponse = responseObject;
+            DDBattleInfo *fetched = [[DDBattleInfo alloc] init];
+            fetched.battleTitle = [battleFeedResponse objectForKey:@"title"];
+            fetched.battleID = [battleFeedResponse objectForKey:@"id"];
+            fetched.leftUser = @"李林";
+            fetched.rightUser = @"江南";
+            fetched.battleTimeStamp = NSTimeIntervalSince1970;
+            fetched.leftVotes = [[battleFeedResponse objectForKey:@"leftCount"] integerValue];
+            fetched.rightVotes = [[battleFeedResponse objectForKey:@"rightCount"] integerValue];
+            fetched.leftImage = [battleFeedResponse objectForKey:@"leftImage"];
+            fetched.leftVideo = [battleFeedResponse objectForKey:@"leftVideo"];
+            fetched.rightImage = [battleFeedResponse objectForKey:@"rightImage"];
+            fetched.rightVideo = [battleFeedResponse objectForKey:@"rightVideo"];
+            
+            [self.battleFeedDataArray replaceObjectAtIndex:0 withObject:fetched];
+            [self.tableView reloadData];
+        }
+
         
     } failure:^(NSURLSessionTask *operation, NSError *error) {
         NSLog(@"Error: %@", error);
