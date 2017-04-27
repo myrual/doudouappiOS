@@ -41,16 +41,24 @@
     if(myshared.isLoggedIn == false){
         return 1;
     }else{
-        return 1;
+        return 2;
     }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     sharedSingleton *myshared = [sharedSingleton sharedManager];
-    if(myshared.isLoggedIn == false){
-        return 4;
+    if(section == 0){
+        if(myshared.isLoggedIn == false){
+            return 4;
+        }else{
+            return 0;
+        }
     }else{
-        return 0;
+        if(myshared.isLoggedIn == false){
+            return 0;
+        }else{
+            return 3;
+        }
     }
 }
 
@@ -81,11 +89,11 @@
         if(indexPath.row == 2){
             [cell.textLabel setText:@"password"];
             UITextField *field = [[UITextField alloc] init];
+            self.passField = field;
+            [field setPlaceholder:@"password"];
             field.autocorrectionType = FALSE;
             field.autocapitalizationType = FALSE;
-            field.secureTextEntry = TRUE;
-
-            [field setPlaceholder:@"password"];
+            field.keyboardType = UIKeyboardTypeEmailAddress;
             [cell addSubview:field];
             [field mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(cell.mas_top);
@@ -93,30 +101,49 @@
                 make.width.equalTo(cell.mas_width).with.offset(-100);
                 make.height.equalTo(@30);
             }];
-            self.passField = field;
         }
-        
         if(indexPath.row == 3){
-            UIButton *loginButton = [[UIButton alloc] init];
-            [loginButton setTitle:@"Login" forState:UIControlStateNormal];
-            [loginButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            [cell addSubview:loginButton];
-            [loginButton mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.top.equalTo(cell.mas_top);
-                make.right.equalTo(cell.mas_right).with.offset(-20);
-                make.left.equalTo(cell.mas_left).with.offset(20);
-                make.height.equalTo(cell.mas_height).offset(-10);
-            }];
-            [loginButton addTarget:self action:@selector(addLibrary) forControlEvents:UIControlEventTouchUpInside];
+            [cell.textLabel setText:@"Login"];
         }
     }
 
+    if(indexPath.section == 1){
+        if(indexPath.row == 0){;
+            [cell.textLabel setText:@"profile"];
+        }
+        if(indexPath.row == 1){
+            sharedSingleton *myshared = [sharedSingleton sharedManager];
 
+            NSString *userEmail = [@"email:" stringByAppendingString:myshared.userEmail];
+            [cell.textLabel setText:userEmail];
+        }
+        if(indexPath.row == 2){
+            [cell.textLabel setText:@"Logout"];
+        }
+    }
     
     // Configure the cell...
     
     return cell;
 }
+
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if(indexPath.section == 0){
+        if(indexPath.row == 3){
+            [self addLibrary];
+        }
+        
+    }
+    if(indexPath.section == 1){
+        if(indexPath.row == 2){
+            sharedSingleton *userSingle = [sharedSingleton sharedManager];
+            userSingle.isLoggedIn = false;
+            [self.tableView reloadData];
+        }
+    }
+
+}
+
 -(void)addLibrary{
     sharedSingleton *userSingle = [sharedSingleton sharedManager];
     NSString *loginURLString = [userSingle.rootURL stringByAppendingString:@"users/sign_in.json"];
@@ -133,6 +160,7 @@
         userSingle.userToken = auth_token;
         NSDictionary *tokenparameters = @{@"appid": userSingle.appID, @"appsecret":userSingle.appSecret, @"user_email": userSingle.userEmail,@"user_token":userSingle.userToken};
         userSingle.isLoggedIn = true;
+        [self.tableView reloadData];
         
     } failure:^(NSURLSessionTask *operation, NSError *error) {
         NSLog(@"Error: %@", error);
