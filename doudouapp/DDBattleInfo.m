@@ -17,6 +17,11 @@
 @synthesize leftVotes;
 @synthesize rightVotes;
 @synthesize myVote;
+@synthesize leftImage;
+@synthesize leftVideo;
+@synthesize rightImage;
+@synthesize rightVideo;
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

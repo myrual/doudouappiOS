@@ -14,9 +14,10 @@
 #import <MobileCoreServices/MobileCoreServices.h> // needed for video types
 #import "sharedSingleton.h"
 #import "RegLoginViewController.h"
-
+#import "AFNetworking.h"
+#import "UIImageView+AFNetworking.h"
 @interface BattleFeedTableViewController ()<UIImagePickerControllerDelegate, AVPlayerViewControllerDelegate>
-@property (nonatomic, readwrite, retain) NSArray *battleFeedDataArray;
+@property (nonatomic, readwrite, retain) NSMutableArray *battleFeedDataArray;
 @end
 
 @implementation BattleFeedTableViewController
@@ -39,7 +40,7 @@
     seconds.battleTimeStamp = NSTimeIntervalSince1970;
     seconds.leftVotes = 1;
     seconds.rightVotes = 10;
-    self.battleFeedDataArray = [NSArray arrayWithObjects:first, seconds, nil];
+    self.battleFeedDataArray = [NSMutableArray arrayWithObjects:first, seconds, nil];
     
     UIButton *addButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
     [addButton addTarget:self action:@selector(addLibrary) forControlEvents:UIControlEventTouchUpInside];
@@ -53,6 +54,44 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    NSString *LoginURLString = @"https://dry-fjord-76939.herokuapp.com/users/sign_in.json";
+    NSString *feedURLString = @"https://dry-fjord-76939.herokuapp.com/api/v1/battles.json";
+    NSDictionary *parameters = @{@"appid": @"app123", @"appsecret":@"333", @"email": @"admin@test.com",@"password":@"123456"};
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    [manager POST:LoginURLString parameters:parameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        NSDictionary *response = responseObject;
+
+        NSString *auth_token = [response objectForKey:@"authentication_token"];
+        NSDictionary *parametersWithToken = @{@"appid": @"app123", @"appsecret":@"333", @"user_email": @"admin@test.com",@"user_token":auth_token};
+
+        [manager GET:feedURLString parameters:parametersWithToken progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+            NSLog(@"JSON: %@", responseObject);
+            NSDictionary *battleFeedResponse = responseObject;
+            DDBattleInfo *fetched = [[DDBattleInfo alloc] init];
+            fetched.battleTitle = [battleFeedResponse objectForKey:@"title"];
+            fetched.battleID = [battleFeedResponse objectForKey:@"id"];
+            fetched.leftUser = @"李林";
+            fetched.rightUser = @"江南";
+            fetched.battleTimeStamp = NSTimeIntervalSince1970;
+            fetched.leftVotes = 5;
+            fetched.rightVotes = 5;
+            fetched.leftImage = [battleFeedResponse objectForKey:@"leftImage"];
+            fetched.leftVideo = [battleFeedResponse objectForKey:@"leftVideo"];
+            fetched.rightImage = [battleFeedResponse objectForKey:@"rightImage"];
+            fetched.rightVideo = [battleFeedResponse objectForKey:@"rightVideo"];
+
+            [self.battleFeedDataArray replaceObjectAtIndex:0 withObject:fetched];
+            [self.tableView reloadData];
+
+        } failure:^(NSURLSessionTask *operation, NSError *error) {
+            NSLog(@"Error: %@", error);
+        }];
+
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -166,11 +205,13 @@
     
     [cell addSubview:leftUser];
     [cell addSubview:rightUser];
-    if(myshared.redAvatar != nil && myshared.blueAvatar != nil){
-        UIImageView *leftUserAvatar = [[UIImageView alloc] initWithImage:myshared.blueAvatar];
+    if(thisBattleInfo.leftImage != nil && thisBattleInfo.rightImage != nil){
+        UIImageView *leftUserAvatar = [[UIImageView alloc] init];
+        [leftUserAvatar setImageWithURL:[NSURL URLWithString:thisBattleInfo.leftImage]];
         leftUserAvatar.layer.cornerRadius = 15;
         leftUserAvatar.layer.masksToBounds = YES;
-        UIImageView *rightUserAvatar = [[UIImageView alloc] initWithImage:myshared.redAvatar];
+        UIImageView *rightUserAvatar = [[UIImageView alloc] init];
+        [rightUserAvatar setImageWithURL:[NSURL URLWithString:thisBattleInfo.rightImage]];
         rightUserAvatar.layer.cornerRadius = 15;
         rightUserAvatar.layer.masksToBounds = YES;
         [cell addSubview:leftUserAvatar];
@@ -245,12 +286,12 @@
     
 
 
-    if(myshared.redURL  != nil && myshared.blueURL != nil){
-        AVPlayer *redPlayer = [[AVPlayer alloc] initWithURL:myshared.redURL];
+    if(thisBattleInfo.leftVideo != nil && thisBattleInfo.rightVideo){
+        AVPlayer *redPlayer = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:thisBattleInfo.leftVideo]];
         AVPlayerViewController *red_vc = [[AVPlayerViewController alloc] init];
         red_vc.player = redPlayer;
         
-        AVPlayer *bluePlayer = [[AVPlayer alloc] initWithURL:myshared.blueURL];
+        AVPlayer *bluePlayer = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:thisBattleInfo.rightVideo]];
         AVPlayerViewController *blue_vc = [[AVPlayerViewController alloc] init];
         blue_vc.player = bluePlayer;
         

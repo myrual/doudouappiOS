@@ -17,4 +17,8 @@
 @property (nonatomic, readwrite) NSInteger leftVotes;
 @property (nonatomic, readwrite) NSInteger rightVotes;
 @property (nonatomic, readwrite) NSInteger myVote;
+@property (nonatomic, readwrite) NSString *leftImage;
+@property (nonatomic, readwrite) NSString *leftVideo;
+@property (nonatomic, readwrite) NSString *rightImage;
+@property (nonatomic, readwrite) NSString *rightVideo;
 @end
