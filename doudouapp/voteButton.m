@@ -19,4 +19,5 @@
 @synthesize battleID;
 @synthesize userID;
 @synthesize needMirror;
+@synthesize voteURL;
 @end

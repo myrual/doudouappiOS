@@ -55,21 +55,26 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    
-    //NSString *finalURLString = @"https://dd.doudouapp.com";
-    NSString *finalURLString = @"https://dry-fjord-76939.herokuapp.com/";
-    NSString *loginURLString = [finalURLString stringByAppendingString:@"/users/sign_in.json"];
-    NSString *feedURLString = [finalURLString stringByAppendingString:@"/api/v1/battles.json"];
-    NSDictionary *parameters = @{@"appid": @"app123", @"appsecret":@"333", @"email": @"admin@test.com",@"password":@"123456"};
+#if 1
+
+    sharedSingleton *userSingle = [sharedSingleton sharedManager];
+    NSString *finalURLString = userSingle.rootURL;
+    userSingle.appID = @"doudouAppiOS";
+    userSingle.appSecret = @"doudouAppiOSSecret145";
+    userSingle.userEmail = @"admin@test.com";
+    NSString *loginURLString = [finalURLString stringByAppendingString:@"users/sign_in.json"];
+    NSString *feedURLString = [userSingle.finalURL stringByAppendingString:@"battles.json"];
+    NSDictionary *loginparameters = @{@"appid": userSingle.appID, @"appsecret":userSingle.appSecret, @"email": userSingle.userEmail,@"password":@"123456"};
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    [manager POST:loginURLString parameters:parameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+    [manager POST:loginURLString parameters:loginparameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         NSDictionary *response = responseObject;
 
         NSString *auth_token = [response objectForKey:@"authentication_token"];
-        NSDictionary *parametersWithToken = @{@"appid": @"app123", @"appsecret":@"333", @"user_email": @"admin@test.com",@"user_token":auth_token};
+        userSingle.userToken = auth_token;
+        NSDictionary *tokenparameters = @{@"appid": userSingle.appID, @"appsecret":userSingle.appSecret, @"user_email": userSingle.userEmail,@"user_token":userSingle.userToken};
 
-        [manager GET:feedURLString parameters:parametersWithToken progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+        [manager GET:feedURLString parameters:tokenparameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
             NSLog(@"JSON: %@", responseObject);
             NSDictionary *battleFeedResponse = responseObject;
             DDBattleInfo *fetched = [[DDBattleInfo alloc] init];
@@ -95,6 +100,7 @@
     } failure:^(NSURLSessionTask *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
+#endif
 }
 
 - (void)didReceiveMemoryWarning {
@@ -151,40 +157,31 @@
 }
 
 -(void) voteFor:(voteButton *) sender{
-    
+
+    //NSString *finalURLString = @"https://dd.doudouapp.com";
     sharedSingleton *myshared = [sharedSingleton sharedManager];
+    NSString *finalURLString = myshared.finalURL;
     if (myshared.isLoggedIn == false) {
         RegLoginViewController *vc = [[RegLoginViewController alloc] init];
         [self.navigationController pushViewController:vc animated:true];
         return;
     }
     
+    sharedSingleton *userSingle = [sharedSingleton sharedManager];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    NSString *voteWithBattleURL = [NSString stringWithFormat:@"/battles/%@/%@", sender.battleID, sender.voteURL];
+    NSString *voteURL = [finalURLString stringByAppendingString:voteWithBattleURL];
+    NSDictionary *tokenparameters = @{@"appid": userSingle.appID, @"appsecret":userSingle.appSecret, @"user_email": userSingle.userEmail,@"user_token":userSingle.userToken};
+    
+    NSLog(@"vote url is %@ with parameter %@", voteURL, tokenparameters);
+    [manager POST:voteURL parameters:tokenparameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
     NSLog(@"jumpto");
-    userProfileTableViewController *vc = [[userProfileTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    vc.userName = sender.battleID;
-
-    for(NSInteger i = 0; i < self.battleFeedDataArray.count; i++){
-        DDBattleInfo *voteCellBattle = [self.battleFeedDataArray objectAtIndex:i];
-        if([voteCellBattle.battleID isEqualToString:sender.battleID]){
-            if(sender.needMirror){
-                voteCellBattle.rightVotes = voteCellBattle.rightVotes + 1;
-                voteCellBattle.myVote = 2;
-            }else{
-                voteCellBattle.leftVotes = voteCellBattle.leftVotes + 1;
-                voteCellBattle.myVote = 1;
-            }
-            NSIndexSet *toReload = [NSIndexSet indexSetWithIndex:i];
-            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:true];
-            hud.mode = MBProgressHUDModeText;
-            [hud.label setText:@"感谢投票"];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                hud.hidden = true;
-            });
-            
-            
-            [self.tableView reloadSections:toReload withRowAnimation:UITableViewRowAnimationNone];
-        }
-    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -355,7 +352,7 @@
     leftThumbsUp.needMirror = false;
     leftThumbsUp.battleID = thisBattleInfo.battleID;
     leftThumbsUp.userID = thisBattleInfo.leftUser;
-
+    leftThumbsUp.voteURL = @"follow_left_video.json";
     
     [cell addSubview:leftThumbsUp];
     [leftThumbsUp mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -372,6 +369,8 @@
     rightThumbsUp.needMirror = true;
     rightThumbsUp.battleID = thisBattleInfo.battleID;
     rightThumbsUp.userID = thisBattleInfo.rightUser;
+    rightThumbsUp.voteURL = @"follow_right_video.json";
+    
     UIImage * rightThumb = [UIImage imageWithCGImage:[redThumbsUp imageWithSize:CGSizeMake(20, 20)].CGImage scale:1.2 orientation:UIImageOrientationUpMirrored];
     UIImage * rightthumb_unselect = [UIImage imageWithCGImage:[whiteThumbsUp_unselect imageWithSize:CGSizeMake(20, 20)].CGImage scale:1.2 orientation:UIImageOrientationUpMirrored];
 

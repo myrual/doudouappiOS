@@ -10,6 +10,7 @@
 
 @interface voteButton : UIButton
 @property (nonatomic, readwrite, retain) NSString *battleID;
+@property (nonatomic, readwrite, retain) NSString *voteURL;
 @property (nonatomic, readwrite, retain) NSString *userID;
 @property (nonatomic, readwrite) BOOL  needMirror;
 @end
