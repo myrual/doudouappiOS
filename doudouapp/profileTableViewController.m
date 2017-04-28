@@ -148,23 +148,16 @@
 }
 
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    sharedSingleton *myshared = [sharedSingleton sharedManager];
-    if(indexPath.section == 0){
-        if(myshared.isLoggedIn == false){
-            if(indexPath.row == 2){
-                [self addLibrary];
-            }
-        }else{
-            if(indexPath.row == 1){
-                sharedSingleton *userSingle = [sharedSingleton sharedManager];
-                userSingle.isLoggedIn = false;
-                [self.tableView reloadData];
-            }
-        }
-    }
+    [self.emailField resignFirstResponder];
+    [self.passField resignFirstResponder];
 }
 
 -(void)addLibrary{
+    [self.emailField resignFirstResponder];
+    [self.passField resignFirstResponder];
+    if([self.emailField.text length] == 0 || [self.passField.text length] == 0){
+        return;
+    }
     sharedSingleton *userSingle = [sharedSingleton sharedManager];
     NSString *loginURLString = [userSingle.rootURL stringByAppendingString:@"users/sign_in.json"];
     userSingle.appID = @"doudouAppiOS";
@@ -188,7 +181,9 @@
             userSingle.userToken = auth_token;
             NSDictionary *tokenparameters = @{@"appid": userSingle.appID, @"appsecret":userSingle.appSecret, @"user_email": userSingle.userEmail,@"user_token":userSingle.userToken};
             userSingle.isLoggedIn = true;
-            [self.tableView reloadData];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
             
         } failure:^(NSURLSessionTask *operation, NSError *error) {
             hud.hidden = true;

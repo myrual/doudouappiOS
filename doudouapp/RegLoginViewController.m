@@ -23,7 +23,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     
+    [self.view addGestureRecognizer:tap];
+
     self.title = @"登录";
     self.view.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
     [self.view setBackgroundColor:[UIColor whiteColor]];
@@ -145,6 +148,12 @@
     // Do any additional setup after loading the view.
 }
 
+-(void)dismissKeyboard
+{
+    [self.emailField resignFirstResponder];
+    [self.passField resignFirstResponder];
+}
+
 -(void)continueWithPhone{
     sharedSingleton *userSingle = [sharedSingleton sharedManager];
     NSString *loginURLString = [userSingle.rootURL stringByAppendingString:@"users/sign_in.json"];
@@ -154,6 +163,10 @@
     NSString *inputPassString = self.passField.text;
     NSDictionary *loginparameters = @{@"appid": userSingle.appID, @"appsecret":userSingle.appSecret, @"email": userSingle.userEmail,@"password":inputPassString};
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:true];
+    hud.mode = MBProgressHUDModeText;
+    [hud.label setText:@"登录中，请稍后"];
+
     [manager POST:loginURLString parameters:loginparameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         NSDictionary *response = responseObject;
@@ -162,8 +175,6 @@
         NSDictionary *tokenparameters = @{@"appid": userSingle.appID, @"appsecret":userSingle.appSecret, @"user_email": userSingle.userEmail,@"user_token":userSingle.userToken};
         sharedSingleton *myshared = [sharedSingleton sharedManager];
         myshared.isLoggedIn = true;
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:true];
-        hud.mode = MBProgressHUDModeText;
         [hud.label setText:@"登录成功！"];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             hud.hidden = true;
@@ -171,6 +182,7 @@
         });
         
     } failure:^(NSURLSessionTask *operation, NSError *error) {
+        hud.hidden = true;
         NSLog(@"Error: %@", error);
         userSingle.isLoggedIn = false;
     }];
