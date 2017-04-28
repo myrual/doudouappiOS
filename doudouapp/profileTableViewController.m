@@ -38,12 +38,7 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    sharedSingleton *myshared = [sharedSingleton sharedManager];
-    if(myshared.isLoggedIn == false){
-        return 1;
-    }else{
-        return 2;
-    }
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -52,19 +47,19 @@
         if(myshared.isLoggedIn == false){
             return 3;
         }else{
-            return 0;
-        }
-    }else{
-        if(myshared.isLoggedIn == false){
-            return 0;
-        }else{
             return 2;
         }
     }
+    return 0;
 }
 
 -(NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    sharedSingleton *myshared = [sharedSingleton sharedManager];
+
     if(section == 0){
+        return @"Profile";
+    }
+    if(section == 1){
         return @"Profile";
     }
     return nil;
@@ -73,55 +68,58 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 //    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
     UITableViewCell *cell = [[UITableViewCell alloc] init];
+    
     if(indexPath.section == 0){
-        if(indexPath.row == 0){
-            [cell.textLabel setText:@"email"];
-            UITextField *field = [[UITextField alloc] init];
-            [field setPlaceholder:@"email"];
-            field.autocorrectionType = FALSE;
-            field.autocapitalizationType = FALSE;
-            field.keyboardType = UIKeyboardTypeEmailAddress;
-            [cell addSubview:field];
-            [field mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.top.equalTo(cell.mas_top);
-                make.right.equalTo(cell.mas_right).with.offset(-10);
-                make.width.equalTo(cell.mas_width).with.offset(-120);
-                make.height.equalTo(@30);
-            }];
-            self.emailField = field;
+        sharedSingleton *myshared = [sharedSingleton sharedManager];
+        if(myshared.isLoggedIn == false){
+            if(indexPath.row == 0){
+                [cell.textLabel setText:@"email"];
+                UITextField *field = [[UITextField alloc] init];
+                [field setPlaceholder:@"email"];
+                field.autocorrectionType = FALSE;
+                field.autocapitalizationType = FALSE;
+                field.keyboardType = UIKeyboardTypeEmailAddress;
+                [cell addSubview:field];
+                [field mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.top.equalTo(cell.mas_top);
+                    make.right.equalTo(cell.mas_right).with.offset(-10);
+                    make.width.equalTo(cell.mas_width).with.offset(-120);
+                    make.height.equalTo(@30);
+                }];
+                self.emailField = field;
+            }
+            if(indexPath.row == 1){
+                [cell.textLabel setText:@"password"];
+                UITextField *field = [[UITextField alloc] init];
+                self.passField = field;
+                [field setPlaceholder:@"password"];
+                field.autocorrectionType = FALSE;
+                field.autocapitalizationType = FALSE;
+                field.keyboardType = UIKeyboardTypeEmailAddress;
+                [cell addSubview:field];
+                [field mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.top.equalTo(cell.mas_top);
+                    make.right.equalTo(cell.mas_right).with.offset(-10);
+                    make.width.equalTo(cell.mas_width).with.offset(-120);
+                    make.height.equalTo(@30);
+                }];
+            }
+            if(indexPath.row == 2){
+                [cell.textLabel setText:@"Login"];
+                [cell.textLabel setTextAlignment:NSTextAlignmentCenter];
+            }
         }
-        if(indexPath.row == 1){
-            [cell.textLabel setText:@"password"];
-            UITextField *field = [[UITextField alloc] init];
-            self.passField = field;
-            [field setPlaceholder:@"password"];
-            field.autocorrectionType = FALSE;
-            field.autocapitalizationType = FALSE;
-            field.keyboardType = UIKeyboardTypeEmailAddress;
-            [cell addSubview:field];
-            [field mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.top.equalTo(cell.mas_top);
-                make.right.equalTo(cell.mas_right).with.offset(-10);
-                make.width.equalTo(cell.mas_width).with.offset(-120);
-                make.height.equalTo(@30);
-            }];
-        }
-        if(indexPath.row == 2){
-            [cell.textLabel setText:@"Login"];
-            [cell.textLabel setTextAlignment:NSTextAlignmentCenter];
-        }
-    }
-
-    if(indexPath.section == 1){
-        if(indexPath.row == 0){
-            sharedSingleton *myshared = [sharedSingleton sharedManager];
-
-            NSString *userEmail = [@"email:" stringByAppendingString:myshared.userEmail];
-            [cell.textLabel setText:userEmail];
-        }
-        if(indexPath.row == 1){
-            [cell.textLabel setText:@"Logout"];
-            [cell.textLabel setTextAlignment:NSTextAlignmentCenter];
+        else{
+            if(indexPath.row == 0){
+                sharedSingleton *myshared = [sharedSingleton sharedManager];
+                
+                NSString *userEmail = [@"email:" stringByAppendingString:myshared.userEmail];
+                [cell.textLabel setText:userEmail];
+            }
+            if(indexPath.row == 1){
+                [cell.textLabel setText:@"Logout"];
+                [cell.textLabel setTextAlignment:NSTextAlignmentCenter];
+            }
         }
     }
     
@@ -131,20 +129,20 @@
 }
 
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    sharedSingleton *myshared = [sharedSingleton sharedManager];
     if(indexPath.section == 0){
-        if(indexPath.row == 2){
-            [self addLibrary];
+        if(myshared.isLoggedIn == false){
+            if(indexPath.row == 2){
+                [self addLibrary];
+            }
+        }else{
+            if(indexPath.row == 1){
+                sharedSingleton *userSingle = [sharedSingleton sharedManager];
+                userSingle.isLoggedIn = false;
+                [self.tableView reloadData];
+            }
         }
-        
     }
-    if(indexPath.section == 1){
-        if(indexPath.row == 1){
-            sharedSingleton *userSingle = [sharedSingleton sharedManager];
-            userSingle.isLoggedIn = false;
-            [self.tableView reloadData];
-        }
-    }
-
 }
 
 -(void)addLibrary{
