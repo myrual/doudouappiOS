@@ -84,7 +84,7 @@
                     make.top.equalTo(cell.mas_top);
                     make.right.equalTo(cell.mas_right).with.offset(-10);
                     make.width.equalTo(cell.mas_width).with.offset(-120);
-                    make.height.equalTo(@30);
+                    make.bottom.equalTo(cell.mas_bottom);
                 }];
                 self.emailField = field;
             }
@@ -101,30 +101,46 @@
                     make.top.equalTo(cell.mas_top);
                     make.right.equalTo(cell.mas_right).with.offset(-10);
                     make.width.equalTo(cell.mas_width).with.offset(-120);
-                    make.height.equalTo(@30);
+                    make.bottom.equalTo(cell.mas_bottom);
                 }];
             }
             if(indexPath.row == 2){
-                [cell.textLabel setText:@"Login"];
-                [cell.textLabel setTextAlignment:NSTextAlignmentCenter];
+                UIButton *loginButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+                [loginButton setTitle:@"Login" forState:UIControlStateNormal];
+                [cell addSubview:loginButton];
+                [loginButton mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.top.equalTo(cell.mas_top);
+                    make.right.equalTo(cell.mas_right).with.offset(-20);
+                    make.left.equalTo(cell.mas_left).with.offset(20);
+                    make.bottom.equalTo(cell.mas_bottom);
+                }];
+                [loginButton addTarget:self action:@selector(addLibrary) forControlEvents:UIControlEventTouchUpInside];
             }
         }
         else{
             if(indexPath.row == 0){
                 sharedSingleton *myshared = [sharedSingleton sharedManager];
-                
-                NSString *userEmail = [@"email:" stringByAppendingString:myshared.userEmail];
-                [cell.textLabel setText:userEmail];
+                [cell.textLabel setText:myshared.userEmail];
+                [cell.textLabel setTextAlignment:NSTextAlignmentCenter];
             }
             if(indexPath.row == 1){
-                [cell.textLabel setText:@"Logout"];
-                [cell.textLabel setTextAlignment:NSTextAlignmentCenter];
+                UIButton *logoutButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+                [logoutButton setTitle:@"Logout" forState:UIControlStateNormal];
+                [cell addSubview:logoutButton];
+                [logoutButton mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.top.equalTo(cell.mas_top);
+                    make.right.equalTo(cell.mas_right).with.offset(-20);
+                    make.left.equalTo(cell.mas_left).with.offset(20);
+                    make.bottom.equalTo(cell.mas_bottom);
+                }];
+                [logoutButton addTarget:self action:@selector(addLibrary) forControlEvents:UIControlEventTouchUpInside];
             }
         }
     }
     
     // Configure the cell...
     
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
 
@@ -167,6 +183,12 @@
         NSLog(@"Error: %@", error);
         userSingle.isLoggedIn = false;
     }];
+}
+
+-(void) logoutAction{
+    sharedSingleton *userSingle = [sharedSingleton sharedManager];
+    userSingle.isLoggedIn = false;
+    [self.tableView reloadData];
 }
 
 
