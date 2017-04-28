@@ -25,7 +25,7 @@
     FAKFontAwesome *addFont = [FAKFontAwesome plusIconWithSize:20];
     UIBarButtonItem *plusButton = [[UIBarButtonItem alloc] initWithImage:[addFont imageWithSize:CGSizeMake(20, 20)] style:UIBarButtonItemStyleDone target:self action:@selector(addContact)];
     
-    self.navigationItem.rightBarButtonItem = plusButton;
+    //self.navigationItem.rightBarButtonItem = plusButton;
     
     self.title = @"斗斗";
     
