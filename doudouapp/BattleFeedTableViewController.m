@@ -18,12 +18,16 @@
 #import "UIImageView+AFNetworking.h"
 @interface BattleFeedTableViewController ()<UIImagePickerControllerDelegate, AVPlayerViewControllerDelegate>
 @property (nonatomic, readwrite, retain) NSMutableArray *battleFeedDataArray;
+
 @end
-
 @implementation BattleFeedTableViewController
-
+#define ROW_TITLE  0
+#define ROW_USER   1
+#define ROW_VIDEO  2
+#define ROW_VOTES  3
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.tableView setSeparatorColor:[UIColor clearColor]];
     DDBattleInfo *first = [[DDBattleInfo alloc] init];
     first.battleTitle = @"街头霸王";
     first.battleID = @"1111";
@@ -146,7 +150,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    return 4;
 }
 
 -(void) jumpto:(userButton *) sender{
@@ -207,277 +211,283 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    sharedSingleton *myshared = [sharedSingleton sharedManager];
-
-    //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"feed" forIndexPath:indexPath];
     DDBattleInfo *thisBattleInfo = [self.battleFeedDataArray objectAtIndex:indexPath.section];
     UITableViewCell *cell = [[UITableViewCell alloc] init];
-    userButton *leftUser = [[userButton alloc] initWithFrame:CGRectMake(10, 10, 100, 20)];
-    leftUser.userData = thisBattleInfo.leftUser;
-    [leftUser setTitle:thisBattleInfo.leftUser forState:UIControlStateNormal];
-    [leftUser setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [leftUser addTarget:self action:@selector(jumpto:) forControlEvents:UIControlEventTouchUpInside];
-    
-    userButton *rightUser = [[userButton alloc] initWithFrame:CGRectMake(300, 10, 100, 20)];
-    rightUser.userData = thisBattleInfo.rightUser;
-    [rightUser setTitle:thisBattleInfo.rightUser forState:UIControlStateNormal];
-    [rightUser setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [rightUser addTarget:self action:@selector(jumpto:) forControlEvents:UIControlEventTouchUpInside];
-    
-    [cell addSubview:leftUser];
-    [cell addSubview:rightUser];
-    if(thisBattleInfo.leftImage != nil && thisBattleInfo.rightImage != nil){
-        UIImageView *leftUserAvatar = [[UIImageView alloc] init];
-        NSURL *leftURL = [NSURL URLWithString:[thisBattleInfo.leftImage stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
-    
-
+    if(indexPath.row == ROW_TITLE){//title
+        UILabel *battleTitle = [[UILabel alloc] init];
+        [battleTitle setText:thisBattleInfo.battleTitle];
+        [battleTitle setTextAlignment:NSTextAlignmentCenter];
         
-        [leftUserAvatar setImageWithURL:leftURL];
-        leftUserAvatar.layer.cornerRadius = 15;
-        leftUserAvatar.layer.masksToBounds = YES;
-        UIImageView *rightUserAvatar = [[UIImageView alloc] init];
-        NSURL *rightURL = [NSURL URLWithString:[thisBattleInfo.rightImage stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
-
-        [rightUserAvatar setImageWithURL:rightURL];
-        rightUserAvatar.layer.cornerRadius = 15;
-        rightUserAvatar.layer.masksToBounds = YES;
-        [cell addSubview:leftUserAvatar];
-        [cell addSubview:rightUserAvatar];
-        
-        [leftUserAvatar mas_makeConstraints:^(MASConstraintMaker *make) {
+        [cell addSubview:battleTitle];
+        [battleTitle mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(cell.mas_top).with.offset(5);
+            make.left.equalTo(cell.mas_left).with.offset(5);
+            make.right.equalTo(cell.mas_right).with.offset(-5);
+            make.bottom.equalTo(cell.mas_bottom);
+        }];
+    }
+    if(indexPath.row == ROW_USER){//VS
+        userButton *leftUser = [[userButton alloc] initWithFrame:CGRectMake(10, 10, 100, 20)];
+        leftUser.userData = thisBattleInfo.leftUser;
+        [leftUser setTitle:thisBattleInfo.leftUser forState:UIControlStateNormal];
+        [leftUser setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [leftUser addTarget:self action:@selector(jumpto:) forControlEvents:UIControlEventTouchUpInside];
+        
+        userButton *rightUser = [[userButton alloc] initWithFrame:CGRectMake(300, 10, 100, 20)];
+        rightUser.userData = thisBattleInfo.rightUser;
+        [rightUser setTitle:thisBattleInfo.rightUser forState:UIControlStateNormal];
+        [rightUser setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [rightUser addTarget:self action:@selector(jumpto:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [cell addSubview:leftUser];
+        [cell addSubview:rightUser];
+        if(thisBattleInfo.leftImage != nil && thisBattleInfo.rightImage != nil){
+            UIImageView *leftUserAvatar = [[UIImageView alloc] init];
+            NSURL *leftURL = [NSURL URLWithString:[thisBattleInfo.leftImage stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
+            
+            
+            
+            [leftUserAvatar setImageWithURL:leftURL];
+            leftUserAvatar.layer.cornerRadius = 15;
+            leftUserAvatar.layer.masksToBounds = YES;
+            UIImageView *rightUserAvatar = [[UIImageView alloc] init];
+            NSURL *rightURL = [NSURL URLWithString:[thisBattleInfo.rightImage stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
+            
+            [rightUserAvatar setImageWithURL:rightURL];
+            rightUserAvatar.layer.cornerRadius = 15;
+            rightUserAvatar.layer.masksToBounds = YES;
+            [cell addSubview:leftUserAvatar];
+            [cell addSubview:rightUserAvatar];
+            
+            [leftUserAvatar mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(cell.mas_top).with.offset(5);
+                make.left.equalTo(cell.mas_left).with.offset(10);
+                make.width.equalTo(@30);
+                make.bottom.equalTo(cell.mas_bottom);
+            }];
+            
+            [rightUserAvatar mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(cell.mas_top).with.offset(5);
+                make.right.equalTo(cell.mas_right).with.offset(-10);
+                make.width.equalTo(@30);
+                make.bottom.equalTo(cell.mas_bottom);
+            }];
+            
+            [leftUser mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(leftUserAvatar.mas_top).with.offset(5);
+                make.left.equalTo(leftUserAvatar.mas_right).with.offset(10);
+                make.width.greaterThanOrEqualTo(@10);
+                make.bottom.equalTo(cell.mas_bottom);
+            }];
+            
+            [rightUser mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(rightUserAvatar.mas_top).with.offset(5);
+                make.right.equalTo(rightUserAvatar.mas_left).with.offset(-10);
+                make.width.greaterThanOrEqualTo(@10);
+                make.bottom.equalTo(cell.mas_bottom);;
+            }];
+            
+        }else{
+            [leftUser mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(cell.mas_top).with.offset(5);
+                make.left.equalTo(cell.mas_left).with.offset(10);
+                make.width.greaterThanOrEqualTo(@10);
+                make.bottom.equalTo(cell.mas_bottom);
+            }];
+            
+            [rightUser mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(cell.mas_top).with.offset(5);
+                make.right.equalTo(cell.mas_right).with.offset(-10);
+                make.width.greaterThanOrEqualTo(@10);
+                make.bottom.equalTo(cell.mas_bottom);
+            }];
+        }
+        
+        UILabel *VSLabel = [[UILabel alloc] init];
+        [VSLabel setText:@"VS"];
+        [VSLabel setTextColor:[UIColor redColor]];
+        
+        [cell addSubview:VSLabel];
+        [VSLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(rightUser.mas_centerY);
+            make.centerX.equalTo(cell.mas_centerX);
+            make.width.greaterThanOrEqualTo(@10);
+            make.height.equalTo(@20);
+        }];
+    }
+    if(indexPath.row == ROW_VIDEO){//video
+        if(thisBattleInfo.leftVideo != nil && thisBattleInfo.rightVideo){
+            NSURL *leftURL = [NSURL URLWithString:[thisBattleInfo.leftVideo stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
+            AVPlayer *redPlayer = [[AVPlayer alloc] initWithURL:leftURL];
+            AVPlayerViewController *red_vc = [[AVPlayerViewController alloc] init];
+            red_vc.player = redPlayer;
+            
+            NSURL *rightURL = [NSURL URLWithString:[thisBattleInfo.rightVideo stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
+            
+            AVPlayer *bluePlayer = [[AVPlayer alloc] initWithURL:rightURL];
+            AVPlayerViewController *blue_vc = [[AVPlayerViewController alloc] init];
+            blue_vc.player = bluePlayer;
+            
+            [self addChildViewController:red_vc];
+            [self addChildViewController:blue_vc];
+            
+            [cell addSubview:red_vc.view];
+            [cell addSubview:blue_vc.view];
+            
+            [red_vc.view mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(cell.mas_top);
+                make.left.equalTo(cell.mas_left);
+                make.right.equalTo(cell.mas_centerX);
+                make.height.equalTo(cell.mas_height);
+            }];
+            [blue_vc.view mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(cell.mas_top);
+                make.left.equalTo(cell.mas_centerX);
+                make.right.equalTo(cell.mas_right);
+                make.height.equalTo(cell.mas_height);
+            }];
+        }
+    }
+    if(indexPath.row == ROW_VOTES){//vote button
+        sharedSingleton *myshared = [sharedSingleton sharedManager];
+        
+        //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"feed" forIndexPath:indexPath];
+        
+        UILabel *leftVotes = [[UILabel alloc] init];
+        UILabel *rightVotes = [[UILabel alloc] init];
+        
+        [leftVotes setText:[NSString stringWithFormat:@"%d", thisBattleInfo.leftVotes]];
+        [rightVotes setText:[NSString stringWithFormat:@"%d", thisBattleInfo.rightVotes]];
+        
+        
+        [cell addSubview:leftVotes];
+        [cell addSubview:rightVotes];
+        
+        
+        
+        FAKFontAwesome *whiteThumbsUp_unselect = [FAKFontAwesome thumbsUpIconWithSize:20];
+        [whiteThumbsUp_unselect addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor]];
+        
+        FAKFontAwesome *redThumbsUp = [FAKFontAwesome thumbsUpIconWithSize:20];
+        [redThumbsUp addAttribute:NSForegroundColorAttributeName value:[UIColor redColor]];
+        
+        FAKFontAwesome *blueThumbsUp = [FAKFontAwesome thumbsUpIconWithSize:20];
+        [blueThumbsUp addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor]];
+        
+        
+        voteButton *leftThumbsUp = [[voteButton alloc] init];
+        leftThumbsUp.layer.cornerRadius = 15;
+        leftThumbsUp.backgroundColor = [UIColor redColor];
+        leftThumbsUp.needMirror = false;
+        leftThumbsUp.battleID = thisBattleInfo.battleID;
+        leftThumbsUp.userID = thisBattleInfo.leftUser;
+        leftThumbsUp.voteURL = @"follow_left_video.json";
+        
+        [cell addSubview:leftThumbsUp];
+        [leftThumbsUp mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(cell.mas_centerY);
             make.left.equalTo(cell.mas_left).with.offset(10);
             make.width.equalTo(@30);
             make.height.equalTo(@30);
         }];
         
-        [rightUserAvatar mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(cell.mas_top).with.offset(5);
+        
+        voteButton *rightThumbsUp = [[voteButton alloc] init];
+        rightThumbsUp.layer.cornerRadius = 15;
+        rightThumbsUp.backgroundColor = [UIColor blueColor];
+        rightThumbsUp.needMirror = true;
+        rightThumbsUp.battleID = thisBattleInfo.battleID;
+        rightThumbsUp.userID = thisBattleInfo.rightUser;
+        rightThumbsUp.voteURL = @"follow_right_video.json";
+        
+        UIImage * rightThumb = [UIImage imageWithCGImage:[redThumbsUp imageWithSize:CGSizeMake(20, 20)].CGImage scale:1.2 orientation:UIImageOrientationUpMirrored];
+        UIImage * rightthumb_unselect = [UIImage imageWithCGImage:[whiteThumbsUp_unselect imageWithSize:CGSizeMake(20, 20)].CGImage scale:1.2 orientation:UIImageOrientationUpMirrored];
+        
+        leftThumbsUp.hidden = false;
+        rightThumbsUp.hidden = false;
+        
+        if(thisBattleInfo.myVote == 0){
+            [rightThumbsUp addTarget:self action:@selector(voteFor:) forControlEvents:UIControlEventTouchUpInside];
+            [leftThumbsUp addTarget:self action:@selector(voteFor:) forControlEvents:UIControlEventTouchUpInside];
+            
+            [rightThumbsUp setBackgroundColor:[UIColor redColor]];
+            [leftThumbsUp setBackgroundColor:[UIColor blueColor]];
+            
+            [rightThumbsUp setImage:rightthumb_unselect forState:UIControlStateNormal];
+            [leftThumbsUp setImage: [whiteThumbsUp_unselect imageWithSize:CGSizeMake(20, 20)] forState:UIControlStateNormal];
+        }
+        
+        if(thisBattleInfo.myVote == 1){
+            [leftThumbsUp setImage:[blueThumbsUp imageWithSize:CGSizeMake(20, 20)] forState:UIControlStateNormal];
+            [leftThumbsUp setBackgroundColor:[UIColor whiteColor]];
+            rightThumbsUp.hidden = true;
+        }
+        
+        if(thisBattleInfo.myVote == 2){
+            leftThumbsUp.hidden = true;
+            [rightThumbsUp setImage:rightThumb forState:UIControlStateNormal];
+            [rightThumbsUp setBackgroundColor:[UIColor whiteColor]];
+            
+        }else{
+            [rightThumbsUp setImage:rightthumb_unselect forState:UIControlStateNormal];
+            [rightThumbsUp setBackgroundColor:[UIColor redColor]];
+            
+        }
+        
+        [cell addSubview:rightThumbsUp];
+        [rightThumbsUp mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(cell.mas_centerY);
             make.right.equalTo(cell.mas_right).with.offset(-10);
             make.width.equalTo(@30);
             make.height.equalTo(@30);
         }];
         
-        [leftUser mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(leftUserAvatar.mas_top).with.offset(5);
-            make.left.equalTo(leftUserAvatar.mas_right).with.offset(10);
-            make.width.greaterThanOrEqualTo(@10);
-            make.height.equalTo(@30);
+        
+        [leftVotes mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(cell.mas_centerY);
+            make.left.equalTo(leftThumbsUp.mas_right).with.offset(5);
+            make.width.equalTo(@20);
+            make.height.equalTo(@20);
         }];
         
-        [rightUser mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(rightUserAvatar.mas_top).with.offset(5);
-            make.right.equalTo(rightUserAvatar.mas_left).with.offset(-10);
-            make.width.greaterThanOrEqualTo(@10);
-            make.height.greaterThanOrEqualTo(@30);
+        
+        [rightVotes mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(cell.mas_centerY);
+            make.right.equalTo(rightThumbsUp.mas_left).with.offset(-5);
+            make.width.equalTo(@20);
+            make.height.equalTo(@20);
         }];
         
-    }else{
-        [leftUser mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(cell.mas_top).with.offset(5);
-            make.left.equalTo(cell.mas_left).with.offset(10);
-            make.width.greaterThanOrEqualTo(@10);
-            make.height.greaterThanOrEqualTo(@20);
+        
+        UIView *progressRed = [[UIView alloc] init];
+        progressRed.backgroundColor = [UIColor redColor];
+        UIView *progressBlue = [[UIView alloc] init];
+        progressBlue.backgroundColor = [UIColor blueColor];
+        
+        [cell addSubview:progressRed];
+        [cell addSubview:progressBlue];
+        
+        CGFloat totalVotes = 1.0 * thisBattleInfo.leftVotes + thisBattleInfo.rightVotes * 1.0;
+        CGFloat percentage = thisBattleInfo.leftVotes * 100.0 /totalVotes;
+        
+        CGFloat everySpace = ([UIScreen mainScreen].bounds.size.width - 160)/ 100 *1.0;
+        CGFloat totalBlueSpace = percentage * everySpace;
+        NSLog(@"totalBlue space is %f", totalBlueSpace);
+        [progressBlue mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(cell.mas_centerY);
+            make.left.equalTo(leftVotes.mas_right).with.offset(5);
+            make.width.mas_equalTo(totalBlueSpace);
+            make.height.equalTo(@20);
         }];
         
-        [rightUser mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(cell.mas_top).with.offset(5);
-            make.right.equalTo(cell.mas_right).with.offset(-10);
-            make.width.greaterThanOrEqualTo(@10);
-            make.height.greaterThanOrEqualTo(@20);
-        }];
-    }
-    
-    UILabel *VSLabel = [[UILabel alloc] init];
-    [VSLabel setText:@"VS"];
-    [VSLabel setTextColor:[UIColor redColor]];
-    
-    [cell addSubview:VSLabel];
-    [VSLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(rightUser.mas_centerY);
-        make.centerX.equalTo(cell.mas_centerX);
-        make.width.greaterThanOrEqualTo(@10);
-        make.height.equalTo(@20);
-    }];
-    
-    UILabel *battleTitle = [[UILabel alloc] init];
-    [battleTitle setText:thisBattleInfo.battleTitle];
-    
-    [cell addSubview:battleTitle];
-    [battleTitle mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(cell.mas_bottom).with.offset(-5);
-        make.left.equalTo(cell.mas_left).with.offset(5);
-        make.width.greaterThanOrEqualTo(@30);
-        make.height.equalTo(@20);
-    }];
-    
-
-
-    if(thisBattleInfo.leftVideo != nil && thisBattleInfo.rightVideo){
-        NSURL *leftURL = [NSURL URLWithString:[thisBattleInfo.leftVideo stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
-        AVPlayer *redPlayer = [[AVPlayer alloc] initWithURL:leftURL];
-        AVPlayerViewController *red_vc = [[AVPlayerViewController alloc] init];
-        red_vc.player = redPlayer;
-
-        NSURL *rightURL = [NSURL URLWithString:[thisBattleInfo.rightVideo stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
-
-        AVPlayer *bluePlayer = [[AVPlayer alloc] initWithURL:rightURL];
-        AVPlayerViewController *blue_vc = [[AVPlayerViewController alloc] init];
-        blue_vc.player = bluePlayer;
-        
-        [self addChildViewController:red_vc];
-        [self addChildViewController:blue_vc];
-        
-        [cell addSubview:red_vc.view];
-        [cell addSubview:blue_vc.view];
-        
-        [red_vc.view mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(VSLabel.mas_bottom).with.offset(5);
-            make.left.equalTo(cell.mas_left);
-            make.right.equalTo(cell.mas_centerX);
-            make.height.equalTo(@280);
-        }];
-        [blue_vc.view mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(VSLabel.mas_bottom).with.offset(5);
-            make.left.equalTo(cell.mas_centerX);
-            make.right.equalTo(cell.mas_right);
-            make.height.equalTo(@280);
+        [progressRed mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(cell.mas_centerY);
+            make.right.equalTo(rightVotes.mas_left).with.offset(-5);
+            make.left.equalTo(leftVotes.mas_right).with.offset(5);
+            make.height.equalTo(@20);
         }];
     }
-    
-    UILabel *leftVotes = [[UILabel alloc] init];
-    UILabel *rightVotes = [[UILabel alloc] init];
-    
-    [leftVotes setText:[NSString stringWithFormat:@"%d", thisBattleInfo.leftVotes]];
-    [rightVotes setText:[NSString stringWithFormat:@"%d", thisBattleInfo.rightVotes]];
-    
-    
-    [cell addSubview:leftVotes];
-    [cell addSubview:rightVotes];
-    
 
-    
-    FAKFontAwesome *whiteThumbsUp_unselect = [FAKFontAwesome thumbsUpIconWithSize:20];
-    [whiteThumbsUp_unselect addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor]];
-    
-    FAKFontAwesome *redThumbsUp = [FAKFontAwesome thumbsUpIconWithSize:20];
-    [redThumbsUp addAttribute:NSForegroundColorAttributeName value:[UIColor redColor]];
-
-    FAKFontAwesome *blueThumbsUp = [FAKFontAwesome thumbsUpIconWithSize:20];
-    [blueThumbsUp addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor]];
-    
-    
-    voteButton *leftThumbsUp = [[voteButton alloc] init];
-    leftThumbsUp.layer.cornerRadius = 15;
-    leftThumbsUp.backgroundColor = [UIColor redColor];
-    leftThumbsUp.needMirror = false;
-    leftThumbsUp.battleID = thisBattleInfo.battleID;
-    leftThumbsUp.userID = thisBattleInfo.leftUser;
-    leftThumbsUp.voteURL = @"follow_left_video.json";
-    
-    [cell addSubview:leftThumbsUp];
-    [leftThumbsUp mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(battleTitle.mas_top).with.offset(-5);
-        make.left.equalTo(cell.mas_left).with.offset(10);
-        make.width.equalTo(@30);
-        make.height.equalTo(@30);
-    }];
-    
-    
-    voteButton *rightThumbsUp = [[voteButton alloc] init];
-    rightThumbsUp.layer.cornerRadius = 15;
-    rightThumbsUp.backgroundColor = [UIColor blueColor];
-    rightThumbsUp.needMirror = true;
-    rightThumbsUp.battleID = thisBattleInfo.battleID;
-    rightThumbsUp.userID = thisBattleInfo.rightUser;
-    rightThumbsUp.voteURL = @"follow_right_video.json";
-    
-    UIImage * rightThumb = [UIImage imageWithCGImage:[redThumbsUp imageWithSize:CGSizeMake(20, 20)].CGImage scale:1.2 orientation:UIImageOrientationUpMirrored];
-    UIImage * rightthumb_unselect = [UIImage imageWithCGImage:[whiteThumbsUp_unselect imageWithSize:CGSizeMake(20, 20)].CGImage scale:1.2 orientation:UIImageOrientationUpMirrored];
-
-    leftThumbsUp.hidden = false;
-    rightThumbsUp.hidden = false;
-
-    if(thisBattleInfo.myVote == 0){
-        [rightThumbsUp addTarget:self action:@selector(voteFor:) forControlEvents:UIControlEventTouchUpInside];
-        [leftThumbsUp addTarget:self action:@selector(voteFor:) forControlEvents:UIControlEventTouchUpInside];
-        
-        [rightThumbsUp setBackgroundColor:[UIColor redColor]];
-        [leftThumbsUp setBackgroundColor:[UIColor blueColor]];
-        
-        [rightThumbsUp setImage:rightthumb_unselect forState:UIControlStateNormal];
-        [leftThumbsUp setImage: [whiteThumbsUp_unselect imageWithSize:CGSizeMake(20, 20)] forState:UIControlStateNormal];
-    }
-    
-    if(thisBattleInfo.myVote == 1){
-        [leftThumbsUp setImage:[blueThumbsUp imageWithSize:CGSizeMake(20, 20)] forState:UIControlStateNormal];
-        [leftThumbsUp setBackgroundColor:[UIColor whiteColor]];
-        rightThumbsUp.hidden = true;
-    }
-    
-    if(thisBattleInfo.myVote == 2){
-        leftThumbsUp.hidden = true;
-        [rightThumbsUp setImage:rightThumb forState:UIControlStateNormal];
-        [rightThumbsUp setBackgroundColor:[UIColor whiteColor]];
-
-    }else{
-        [rightThumbsUp setImage:rightthumb_unselect forState:UIControlStateNormal];
-        [rightThumbsUp setBackgroundColor:[UIColor redColor]];
-
-    }
-    
-    [cell addSubview:rightThumbsUp];
-    [rightThumbsUp mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(battleTitle.mas_top).with.offset(-5);
-        make.right.equalTo(cell.mas_right).with.offset(-10);
-        make.width.equalTo(@30);
-        make.height.equalTo(@30);
-    }];
-    
-
-    [leftVotes mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(battleTitle.mas_top).with.offset(-5);
-        make.left.equalTo(leftThumbsUp.mas_right).with.offset(5);
-        make.width.equalTo(@20);
-        make.height.equalTo(@20);
-    }];
-    
-    
-    [rightVotes mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(battleTitle.mas_top).with.offset(-5);
-        make.right.equalTo(rightThumbsUp.mas_left).with.offset(-5);
-        make.width.equalTo(@20);
-        make.height.equalTo(@20);
-    }];
-    
-    
-    UIView *progressRed = [[UIView alloc] init];
-    progressRed.backgroundColor = [UIColor redColor];
-    UIView *progressBlue = [[UIView alloc] init];
-    progressBlue.backgroundColor = [UIColor blueColor];
-    
-    [cell addSubview:progressRed];
-    [cell addSubview:progressBlue];
-    
-    CGFloat totalVotes = 1.0 * thisBattleInfo.leftVotes + thisBattleInfo.rightVotes * 1.0;
-    CGFloat percentage = thisBattleInfo.leftVotes * 100.0 /totalVotes;
-
-    CGFloat everySpace = ([UIScreen mainScreen].bounds.size.width - 160)/ 100 *1.0;
-    CGFloat totalBlueSpace = percentage * everySpace;
-    NSLog(@"totalBlue space is %f", totalBlueSpace);
-    [progressBlue mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(leftVotes.mas_bottom);
-        make.left.equalTo(leftVotes.mas_right).with.offset(5);
-        make.width.mas_equalTo(totalBlueSpace);
-        make.height.equalTo(@20);
-    }];
-
-    [progressRed mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(rightVotes.mas_bottom);
-        make.right.equalTo(rightVotes.mas_left).with.offset(-5);
-        make.left.equalTo(leftVotes.mas_right).with.offset(5);
-        make.height.equalTo(@20);
-    }];
     
     
     // Configure the cell...
@@ -487,7 +497,11 @@
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return UIScreen.mainScreen.bounds.size.width + 40;
+    if(indexPath.row == ROW_VIDEO){
+        return UIScreen.mainScreen.bounds.size.width + 40;
+    }else{
+        return 50;
+    }
 }
 /*
  // Override to support conditional editing of the table view.
