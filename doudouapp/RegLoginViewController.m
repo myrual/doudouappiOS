@@ -11,8 +11,11 @@
 #import "FAKFontAwesome.h"
 #import "sharedSingleton.h"
 #import "MBProgressHUD.h"
+#import "AFNetworking.h"
 
 @interface RegLoginViewController ()
+@property (nonatomic, strong, readwrite) UITextField *emailField;
+@property (nonatomic, strong, readwrite) UITextField *passField;
 
 @end
 
@@ -25,11 +28,25 @@
     self.view.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
     [self.view setBackgroundColor:[UIColor whiteColor]];
     UILabel *mobilePhoneTitle = [[UILabel alloc] init];
-    [mobilePhoneTitle setText:@"手机号"];
+
+    [mobilePhoneTitle setText:@"手机号或者邮箱"];
     UITextField *inputPhoneNumber = [[UITextField alloc] init];
-    [inputPhoneNumber setPlaceholder:@"138"];
+    inputPhoneNumber.autocorrectionType = UITextAutocorrectionTypeNo;
+    inputPhoneNumber.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.emailField = inputPhoneNumber;
+    [inputPhoneNumber setPlaceholder:@"手机号或者邮箱"];
     [inputPhoneNumber setBackgroundColor:[UIColor lightGrayColor]];
     inputPhoneNumber.layer.cornerRadius = 5.0;
+    
+    UITextField *inputPassword = [[UITextField alloc] init];
+    inputPassword.autocorrectionType = UITextAutocorrectionTypeNo;
+    inputPassword.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    inputPassword.secureTextEntry = true;
+    self.passField = inputPassword;
+    [inputPassword setPlaceholder:@"密码"];
+    [inputPassword setBackgroundColor:[UIColor lightGrayColor]];
+    inputPassword.layer.cornerRadius = 5.0;
+
     UIButton *continueButton = [[UIButton alloc] init];
     [continueButton setBackgroundColor:[UIColor blueColor]];
     continueButton.layer.cornerRadius = 5.0;
@@ -64,6 +81,7 @@
     [self.view addSubview:mobilePhoneTitle];
     [self.view addSubview:continueButton];
     [self.view addSubview:inputPhoneNumber];
+    [self.view addSubview:inputPassword];
     [self.view addSubview:orSocialLogin];
     [self.view addSubview:weiboLoginBtn];
     [self.view addSubview:wechatLoginBtn];
@@ -76,17 +94,23 @@
         make.right.equalTo(self.view.mas_right).offset(-40);
         make.height.equalTo(@44);
     }];
-
-    [inputPhoneNumber mas_makeConstraints:^(MASConstraintMaker *make) {
+    [inputPassword mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(continueButton.mas_top).with.offset(-20);
         make.centerX.equalTo(self.view.mas_centerX);
         make.left.equalTo(self.view.mas_left).offset(20);
         make.right.equalTo(self.view.mas_right).offset(-20);
         make.height.equalTo(@44);
     }];
-    
+
+    [inputPhoneNumber mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(inputPassword.mas_top).with.offset(-20);
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.left.equalTo(self.view.mas_left).offset(20);
+        make.right.equalTo(self.view.mas_right).offset(-20);
+        make.height.equalTo(@44);
+    }];
     [mobilePhoneTitle mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(inputPhoneNumber.mas_top).with.offset(-20);
+        make.bottom.equalTo(inputPassword.mas_top).with.offset(-20);
         make.centerX.equalTo(self.view.mas_centerX);
         make.left.equalTo(self.view.mas_left).offset(20);
         make.right.equalTo(self.view.mas_right).offset(-20);
@@ -122,15 +146,35 @@
 }
 
 -(void)continueWithPhone{
-    sharedSingleton *myshared = [sharedSingleton sharedManager];
-    myshared.isLoggedIn = true;
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:true];
-    hud.mode = MBProgressHUDModeText;
-    [hud.label setText:@"登录成功！"];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        hud.hidden = true;
-        [self.navigationController popViewControllerAnimated:true];
-    });
+    sharedSingleton *userSingle = [sharedSingleton sharedManager];
+    NSString *loginURLString = [userSingle.rootURL stringByAppendingString:@"users/sign_in.json"];
+    userSingle.appID = @"doudouAppiOS";
+    userSingle.appSecret = @"doudouAppiOSSecret145";
+    userSingle.userEmail = self.emailField.text;
+    NSString *inputPassString = self.passField.text;
+    NSDictionary *loginparameters = @{@"appid": userSingle.appID, @"appsecret":userSingle.appSecret, @"email": userSingle.userEmail,@"password":inputPassString};
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    [manager POST:loginURLString parameters:loginparameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        NSDictionary *response = responseObject;
+        NSString *auth_token = [response objectForKey:@"authentication_token"];
+        userSingle.userToken = auth_token;
+        NSDictionary *tokenparameters = @{@"appid": userSingle.appID, @"appsecret":userSingle.appSecret, @"user_email": userSingle.userEmail,@"user_token":userSingle.userToken};
+        sharedSingleton *myshared = [sharedSingleton sharedManager];
+        myshared.isLoggedIn = true;
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:true];
+        hud.mode = MBProgressHUDModeText;
+        [hud.label setText:@"登录成功！"];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            hud.hidden = true;
+            [self.navigationController popViewControllerAnimated:true];
+        });
+        
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        userSingle.isLoggedIn = false;
+    }];
+
 
 }
 

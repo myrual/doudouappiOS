@@ -34,8 +34,8 @@
         someProperty = [[NSString alloc] initWithString:@"Default Property Value"];
         redURL = nil;
         blueURL = nil;
-        _rootURL = @"https://dd.doudouapp.com/";
-        //_rootURL = @"https://dry-fjord-76939.herokuapp.com/";
+        //_rootURL = @"https://dd.doudouapp.com/";
+        _rootURL = @"https://dry-fjord-76939.herokuapp.com/";
         //_rootURL = @"https://lin-rails-tt-myrual.c9users.io/";
         _apiPath = @"api/v1/";
         _finalURL = [_rootURL stringByAppendingString:_apiPath];

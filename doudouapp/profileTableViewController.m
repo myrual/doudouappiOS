@@ -21,6 +21,7 @@
 @implementation profileTableViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.tableView setContentInset:UIEdgeInsetsMake(50,0,0,0)];
     self.title = @"Profile";
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -49,7 +50,7 @@
     sharedSingleton *myshared = [sharedSingleton sharedManager];
     if(section == 0){
         if(myshared.isLoggedIn == false){
-            return 4;
+            return 3;
         }else{
             return 0;
         }
@@ -57,20 +58,23 @@
         if(myshared.isLoggedIn == false){
             return 0;
         }else{
-            return 3;
+            return 2;
         }
     }
 }
 
+-(NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    if(section == 0){
+        return @"Profile";
+    }
+    return nil;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 //    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
     UITableViewCell *cell = [[UITableViewCell alloc] init];
     if(indexPath.section == 0){
-        if(indexPath.row == 0){;
-            [cell.textLabel setText:@"profile"];
-        }
-        if(indexPath.row == 1){
+        if(indexPath.row == 0){
             [cell.textLabel setText:@"email"];
             UITextField *field = [[UITextField alloc] init];
             [field setPlaceholder:@"email"];
@@ -81,12 +85,12 @@
             [field mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(cell.mas_top);
                 make.right.equalTo(cell.mas_right).with.offset(-10);
-                make.width.equalTo(cell.mas_width).with.offset(-100);
+                make.width.equalTo(cell.mas_width).with.offset(-120);
                 make.height.equalTo(@30);
             }];
             self.emailField = field;
         }
-        if(indexPath.row == 2){
+        if(indexPath.row == 1){
             [cell.textLabel setText:@"password"];
             UITextField *field = [[UITextField alloc] init];
             self.passField = field;
@@ -98,27 +102,26 @@
             [field mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(cell.mas_top);
                 make.right.equalTo(cell.mas_right).with.offset(-10);
-                make.width.equalTo(cell.mas_width).with.offset(-100);
+                make.width.equalTo(cell.mas_width).with.offset(-120);
                 make.height.equalTo(@30);
             }];
         }
-        if(indexPath.row == 3){
+        if(indexPath.row == 2){
             [cell.textLabel setText:@"Login"];
+            [cell.textLabel setTextAlignment:NSTextAlignmentCenter];
         }
     }
 
     if(indexPath.section == 1){
-        if(indexPath.row == 0){;
-            [cell.textLabel setText:@"profile"];
-        }
-        if(indexPath.row == 1){
+        if(indexPath.row == 0){
             sharedSingleton *myshared = [sharedSingleton sharedManager];
 
             NSString *userEmail = [@"email:" stringByAppendingString:myshared.userEmail];
             [cell.textLabel setText:userEmail];
         }
-        if(indexPath.row == 2){
+        if(indexPath.row == 1){
             [cell.textLabel setText:@"Logout"];
+            [cell.textLabel setTextAlignment:NSTextAlignmentCenter];
         }
     }
     
@@ -129,13 +132,13 @@
 
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if(indexPath.section == 0){
-        if(indexPath.row == 3){
+        if(indexPath.row == 2){
             [self addLibrary];
         }
         
     }
     if(indexPath.section == 1){
-        if(indexPath.row == 2){
+        if(indexPath.row == 1){
             sharedSingleton *userSingle = [sharedSingleton sharedManager];
             userSingle.isLoggedIn = false;
             [self.tableView reloadData];
