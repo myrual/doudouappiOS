@@ -16,15 +16,17 @@
 #import "RegLoginViewController.h"
 #import "AFNetworking.h"
 #import "UIImageView+AFNetworking.h"
+#import "MBProgressHUD.h"
+
 @interface BattleFeedTableViewController ()<UIImagePickerControllerDelegate, AVPlayerViewControllerDelegate>
 @property (nonatomic, readwrite, retain) NSMutableArray *battleFeedDataArray;
 
 @end
 @implementation BattleFeedTableViewController
 #define ROW_TITLE  0
-#define ROW_USER   1
-#define ROW_VIDEO  2
-#define ROW_VOTES  3
+//#define ROW_USER   1
+#define ROW_VIDEO  1
+#define ROW_VOTES  2
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.tableView setSeparatorColor:[UIColor clearColor]];
@@ -68,24 +70,19 @@
     userSingle.userEmail = @"admin@test.com";
     NSString *loginURLString = [finalURLString stringByAppendingString:@"users/sign_in.json"];
     NSString *feedURLString = [userSingle.finalURL stringByAppendingString:@"battles.json"];
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"appid",userSingle.appID, @"appsecret", userSingle.appSecret, nil];
+    if(userSingle.isLoggedIn == true){
+        [parameter setObject:userSingle.userEmail forKey:@"email"];
+        [parameter setObject:userSingle.userToken forKey:@"user_token"];
+    }
     NSDictionary *loginparameters = @{@"appid": userSingle.appID, @"appsecret":userSingle.appSecret, @"email": userSingle.userEmail,@"password":@"123456"};
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    [manager POST:loginURLString parameters:loginparameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
-        NSDictionary *response = responseObject;
-
-        NSString *auth_token = [response objectForKey:@"authentication_token"];
-        userSingle.userToken = auth_token;
-        NSDictionary *tokenparameters = @{@"appid": userSingle.appID, @"appsecret":userSingle.appSecret, @"user_email": userSingle.userEmail,@"user_token":userSingle.userToken};
-
-        [manager GET:feedURLString parameters:tokenparameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+        [manager GET:feedURLString parameters:loginparameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
             NSLog(@"JSON: %@", responseObject);
             NSDictionary *battleFeedResponse = responseObject;
             DDBattleInfo *fetched = [[DDBattleInfo alloc] init];
             fetched.battleTitle = [battleFeedResponse objectForKey:@"title"];
             fetched.battleID = [battleFeedResponse objectForKey:@"id"];
-            fetched.leftUser = @"李林";
-            fetched.rightUser = @"江南";
             fetched.battleTimeStamp = NSTimeIntervalSince1970;
             fetched.leftVotes = [[battleFeedResponse objectForKey:@"leftCount"] integerValue];
             fetched.rightVotes = [[battleFeedResponse objectForKey:@"rightCount"] integerValue];
@@ -100,10 +97,6 @@
         } failure:^(NSURLSessionTask *operation, NSError *error) {
             NSLog(@"Error: %@", error);
         }];
-
-    } failure:^(NSURLSessionTask *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
 #endif
 }
 
@@ -187,8 +180,6 @@
             DDBattleInfo *fetched = [[DDBattleInfo alloc] init];
             fetched.battleTitle = [battleFeedResponse objectForKey:@"title"];
             fetched.battleID = [battleFeedResponse objectForKey:@"id"];
-            fetched.leftUser = @"李林";
-            fetched.rightUser = @"江南";
             fetched.battleTimeStamp = NSTimeIntervalSince1970;
             fetched.leftVotes = [[battleFeedResponse objectForKey:@"leftCount"] integerValue];
             fetched.rightVotes = [[battleFeedResponse objectForKey:@"rightCount"] integerValue];
@@ -196,12 +187,17 @@
             fetched.leftVideo = [battleFeedResponse objectForKey:@"leftVideo"];
             fetched.rightImage = [battleFeedResponse objectForKey:@"rightImage"];
             fetched.rightVideo = [battleFeedResponse objectForKey:@"rightVideo"];
-            
             [self.battleFeedDataArray replaceObjectAtIndex:0 withObject:fetched];
             [self.tableView reloadData];
-        }
+        }else {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:true];
+            hud.mode = MBProgressHUDModeText;
+            [hud.label setText:@"已经投过了！"];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                hud.hidden = true;
+            });
 
-        
+        }        
     } failure:^(NSURLSessionTask *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
@@ -226,6 +222,7 @@
             make.bottom.equalTo(cell.mas_bottom);
         }];
     }
+    /*
     if(indexPath.row == ROW_USER){//VS
         userButton *leftUser = [[userButton alloc] initWithFrame:CGRectMake(10, 10, 100, 20)];
         leftUser.userData = thisBattleInfo.leftUser;
@@ -315,6 +312,7 @@
             make.height.equalTo(@20);
         }];
     }
+     */
     if(indexPath.row == ROW_VIDEO){//video
         if(thisBattleInfo.leftVideo != nil && thisBattleInfo.rightVideo){
             NSURL *leftURL = [NSURL URLWithString:[thisBattleInfo.leftVideo stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];

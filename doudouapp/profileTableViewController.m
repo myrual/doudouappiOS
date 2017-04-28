@@ -11,7 +11,7 @@
 #import "Masonry.h"
 #import "AFNetworking.h"
 #import "UIImageView+AFNetworking.h"
-
+#import "MBProgressHUD.h"
 
 @interface profileTableViewController ()
 @property (nonatomic, strong, readwrite) UITextField *emailField;
@@ -79,8 +79,8 @@
                 [cell.textLabel setText:@"email"];
                 UITextField *field = [[UITextField alloc] init];
                 [field setPlaceholder:@"email"];
-                field.autocorrectionType = FALSE;
-                field.autocapitalizationType = FALSE;
+                field.autocorrectionType = UITextAutocorrectionTypeNo;
+                field.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 field.keyboardType = UIKeyboardTypeEmailAddress;
                 [cell addSubview:field];
                 [field mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -136,7 +136,7 @@
                     make.left.equalTo(cell.mas_left).with.offset(20);
                     make.bottom.equalTo(cell.mas_bottom);
                 }];
-                [logoutButton addTarget:self action:@selector(addLibrary) forControlEvents:UIControlEventTouchUpInside];
+                [logoutButton addTarget:self action:@selector(logoutAction) forControlEvents:UIControlEventTouchUpInside];
             }
         }
     }
@@ -173,25 +173,42 @@
     NSString *inputPassString = self.passField.text;
     NSDictionary *loginparameters = @{@"appid": userSingle.appID, @"appsecret":userSingle.appSecret, @"email": userSingle.userEmail,@"password":inputPassString};
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    [manager POST:loginURLString parameters:loginparameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
-        NSDictionary *response = responseObject;
-        NSString *auth_token = [response objectForKey:@"authentication_token"];
-        userSingle.userToken = auth_token;
-        NSDictionary *tokenparameters = @{@"appid": userSingle.appID, @"appsecret":userSingle.appSecret, @"user_email": userSingle.userEmail,@"user_token":userSingle.userToken};
-        userSingle.isLoggedIn = true;
-        [self.tableView reloadData];
-        
-    } failure:^(NSURLSessionTask *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        userSingle.isLoggedIn = false;
-    }];
+    
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.tableView animated:true];
+        hud.mode = MBProgressHUDModeAnnularDeterminate;
+        //hud.mode = MBProgressHUDModeText;
+        [hud.label setText:@"Logging"];
+        [manager POST:loginURLString parameters:loginparameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+            hud.hidden = true;
+            NSLog(@"JSON: %@", responseObject);
+            NSDictionary *response = responseObject;
+            NSString *auth_token = [response objectForKey:@"authentication_token"];
+            userSingle.userToken = auth_token;
+            NSDictionary *tokenparameters = @{@"appid": userSingle.appID, @"appsecret":userSingle.appSecret, @"user_email": userSingle.userEmail,@"user_token":userSingle.userToken};
+            userSingle.isLoggedIn = true;
+            [self.tableView reloadData];
+            
+        } failure:^(NSURLSessionTask *operation, NSError *error) {
+            hud.hidden = true;
+            NSLog(@"Error: %@", error);
+            userSingle.isLoggedIn = false;
+        }];
+    });
 }
 
 -(void) logoutAction{
     sharedSingleton *userSingle = [sharedSingleton sharedManager];
     userSingle.isLoggedIn = false;
     [self.tableView reloadData];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.tableView animated:true];
+    hud.mode = MBProgressHUDModeText;
+    [hud.label setText:@"安全退出"];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        hud.hidden = true;
+        [self.navigationController popViewControllerAnimated:true];
+    });
 }
 
 
